@@ -1,0 +1,180 @@
+<!--
+This HTML file is a Spring.Boot/Thymeleaf template serves as Purchase List manager.
+Application: Purchase Register
+Author: Laszlo Grimm
+Since: 11-11-2022
+-->
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Purchase Register</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        .fieldset {
+            border: 1;
+            border-radius: 6px;
+        }
+        .select {
+            border: 1;
+            border-radius: 6px;
+            background-color: #E0E0E0;
+            width: 90%;
+        }
+        .table {
+            width:100%;
+            text-align:center;
+        }
+        .button {
+            border: 1;
+            border-radius: 6px;
+            background-color: #E0E0E0;
+            height: 32px;
+            width: 90%;
+        }
+    </style>
+</head>
+<!-- <body th:onload="setSelection()" style="text-align:center"> -->
+<body th:onload="'setSelection();'" style="text-align:center">
+<h1>Purchase Register</h1>
+<form action="#" th:action="@{/}" th:object="${mainCube}" method="post">
+    <fieldset class="fieldset">
+        <legend>List of Purchases</legend>
+        <select id="purchaseSelector" th:field="*{mainCubePurchaseLines}" size="8" class="select" th:onchange="'changeAction();'" multiple autofocus>
+            <option th:each="mainCubePurchaseLine: *{mainCubePurchaseLines}" th:value="${mainCubePurchaseLine}"></option>
+        </select>
+    </fieldset>
+    <br>
+    <table class="table">
+        <tr>
+            <td style="width:25%">
+                <input id="selectAll" type="button" value="All" th:onclick="'select(\'selectAll\');'" class="button" />
+            </td>
+            <td style="width:25%">
+                <input id="selectNone" type="button" value="None" th:onclick="'select(\'selectNone\');'" class="button" />
+            </td>
+            <td style="width:25%">
+                <input id="selectInvert" type="button" value="Invert" th:onclick="'select(\'selectInvert\');'" class="button" />
+            </td>
+            <td style="width:25%">
+                <input id="deleteSelected" type="submit" value="Delete" th:onclick="'prepareModel(\'deleteSelected\');'" formaction="/deleteSelected" formmethod="post" class="button" />
+            </td>
+        </tr>
+    </table>
+    <table class="table">
+        <tr>
+            <td id="message" th:text="*{message}" style="height:36px; width:90%"></td>
+        </tr>
+    </table>
+    <table class="table">
+        <tr>
+            <td style="width:50%">
+                <input id="reload" type="submit" value="Reload" formaction="/reload" formmethod="post" class="button" />
+            </td>
+            <td style="width:50%">
+                <input id="save" type="submit" value="Save" formaction="/save" formmethod="post" class="button" />
+            </td>
+        </tr>
+    </table>
+    <table class="table">
+        <tr>
+            <td style="width:33%">
+                <input id="newItem" type="submit" value="New Item" th:onclick="'prepareModel(\'newItem\');'" formaction="/newItem" formmethod="post" class="button" />
+            </td>
+            <td style="width:34%">
+                <input id="viewItem" type="submit" value="View Item" th:onclick="'prepareModel(\'viewItem\');'" formaction="/viewItem" formmethod="post" class="button" />
+            </td>
+            <td style="width:33%">
+                <input id="stats" type="submit" value="Statistics" th:onclick="'prepareModel(\'stats\');'" formaction="/stats" formmethod="post" class="button" />
+            </td>
+        </tr>
+    </table>
+    <script th:inline="javascript">
+        <!-- Applies initial selected status on purchase list elements using model data, sets controls afterwards. -->
+        function setSelection() {
+            alert("Stepped into setSelection");
+            var purchaseSelector = document.getElementById("purchaseSelector");
+            purchaseSelector.selectedIndex = -1;
+            var selectionIndex;
+            for (selectionIndex = 0; selectionIndex < *{mainCubeSelectionIndexes}.length; selectionIndex++) {
+                purchaseSelector[*{mainCubeSelectionIndexes}[selectionIndex]].selected = true;
+            }
+            setControls();
+        }
+
+        <!-- Counts the number of selected items in Purchase list control. -->
+        function int countSelected() {
+            alert("Stepped into countSelected");
+            var purchaseSelector = document.getElementById("purchaseSelector");
+            var optionIndex;
+            var selectedCount = 0;
+            for (optionIndex = 0; optionIndex < purchaseSelector.length; optionIndex++) {
+                if (purchaseSelector[optionIndex].selected) {
+                    selectedCount++;
+                }
+            }
+            return selectedCount;
+        }
+
+        <!-- Sets the disabled parameter of controls, returns number of selected Purchases. -->
+        function int setControls() {
+            alert("Stepped into setControls");
+            var purchaseSelector = document.getElementById("purchaseSelector");
+            var selectedCount = countSelected();
+            document.getElementById("selectAll").disabled = purchaseSelector.length == 0;
+            document.getElementById("selectNone").disabled = selectedCount == 0;
+            document.getElementById("selectInvert").disabled = purchaseSelector.length == 0;
+            document.getElementById("deleteSelected").disabled = selectedCount == 0;
+            <!-- save -->
+            document.getElementById("viewItem").disabled = selectedCount != 1;
+            document.getElementById("stats").disabled = purchaseSelector.length < 2;
+            return selectedCount;
+        }
+
+        <!-- Sets control disability and message on Purchase list manipulation. -->
+        function changeAction() {
+            alert("Stepped into changeAction");
+            document.getElementById("message").value = setControls() + " Purchase(s) have been selected.";
+        }
+
+        <!-- Executes selection commands based on any selection button click. -->
+        function select(mode) {
+            alert("Stepped into select");
+            var purchaseSelector = document.getElementById("purchaseSelector");
+            if (mode.equals("selectNone")) {
+                purchaseSelector.selectedIndex = -1;
+            }
+            else {
+                var optionIndex;
+                for (optionIndex = 0; optionIndex < purchaseSelector.length; optionIndex++) {
+                    if (mode.equals("selectAll")) {
+                        purchaseSelector[optionIndex].selected = true;
+                    }
+                    else {
+                        purchaseSelector[optionIndex].selected = not purchaseSelector[optionIndex].selected;
+                    }
+                }
+            }
+            document.getElementById("message").value = setControls() + " Purchase(s) have been selected.";
+        }
+
+        <!-- Prepares model data before submitting. -->
+        function prepareModel(mode) {
+            alert("Stepped into prepareModel");
+            *{mainCubeSelectionIndexes} = [];
+            if (mode.equals("viewItem")) {
+                *{mainCubeSelectionIndexes}.push(purchaseSelector.selectedIndex);
+            }
+            else {
+                var purchaseSelector = document.getElementById("purchaseSelector");
+                var optionIndex;
+                for (optionIndex = 0; optionIndex < purchaseSelector.length; optionIndex++) {
+                    if (purchaseSelector[optionIndex].selected) {
+                        *{mainCubeSelectionIndexes}.push(optionIndex);
+                    }
+                }
+            }
+        }
+    </script>
+</form>
+</body>
+</html>

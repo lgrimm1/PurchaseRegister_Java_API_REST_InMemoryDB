@@ -1,0 +1,139 @@
+<!--
+This HTML file is a Spring.Boot/Thymeleaf template serves as Purchase Item manager.
+Application: Purchase Register
+Author: Laszlo Grimm
+Since: 11-11-2022
+-->
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Purchase Item</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        .general {
+            border: 1;
+            border-radius: 6px;
+            background-color: #E0E0E0;
+            width:90%;
+        }
+        .fieldset {
+            border: 1;
+            border-radius: 6px;
+        }
+        .table {
+            width:100%;
+            text-align:center;
+        }
+        .button {
+            height: 32px;
+        }
+    </style>
+</head>
+<body style="text-align:center">
+<form action="#" th:action="@{/}" th:object="${itemCube}" method="post">
+    <input id="itemIndex" type="hidden" th:field="*{itemIndex}">
+    <fieldset class="fieldset">
+        <legend>Date of Purchase</legend>
+        <input id="date" type="date" value="*{purchaseDate}" class="general">
+    </fieldset>
+    <br>
+    <fieldset class="fieldset">
+        <legend>Type of Purchase</legend>
+        <table style="width:100%">
+            <tr style="width:100%">
+                <td style="width:10%"></td>
+                <td th:switch="*{purchaseType}" style="width:80%; text-align:left">
+                    <span th:case="CARD">
+                        <input type="radio" name="purchaseType" id="ptCard1" th:field="*{purchaseType}" value="CARD" selected />
+                        <label for="ptCard1">card</label><br>
+                        <input type="radio" name="purchaseType" id="ptCash1" th:field="*{purchaseType}" value="CASH" />
+                        <label for="ptCash1">cash</label><br>
+                        <input type="radio" name="purchaseType" id="ptInternet1" th:field="*{purchaseType}" value="INTERNET" />
+                        <label for="ptInternet1">internet</label>
+                    </span>
+                    <span th:case="CASH">
+                        <input type="radio" name="purchaseType" id="ptCard2" th:field="*{purchaseType}" value="CARD" />
+                        <label for="ptCard2">card</label><br>
+                        <input type="radio" name="purchaseType" id="ptCash2" th:field="*{purchaseType}" value="CASH" selected />
+                        <label for="ptCash2">cash</label><br>
+                        <input type="radio" name="purchaseType" id="ptInternet2" th:field="*{purchaseType}" value="INTERNET" />
+                        <label for="ptInternet2">internet</label>
+                    </span>
+                    <span th:case="INTERNET">
+                        <input type="radio" name="purchaseType" id="ptCard3" th:field="*{purchaseType}" value="CARD" />
+                        <label for="ptCard3">card</label><br>
+                        <input type="radio" name="purchaseType" id="ptCash3" th:field="*{purchaseType}" value="CASH" />
+                        <label for="ptCash3">cash</label><br>
+                        <input type="radio" name="purchaseType" id="ptInternet3" th:field="*{purchaseType}" value="INTERNET" selected />
+                        <label for="ptInternet3">internet</label>
+                    </span>
+                </td>
+                <td style="width:10%"></td>
+            </tr>
+        </table>
+    </fieldset>
+    <br>
+    <fieldset class="fieldset">
+        <legend>Value of Purchase</legend>
+        <input id="value" type="number" value="*{purchaseValue}" onload="setControls()" onchange="setControls()" class="general">
+    </fieldset>
+    <br>
+    <fieldset class="fieldset">
+        <legend>Description of Purchase</legend>
+        <textarea id="description" th:field="*{purchaseDescription}" rows="5" class="general"></textarea>
+    </fieldset>
+    <table class="table">
+        <tr>
+            <td th:text="*{message}" style="height:36px; width:90%"></td>
+        </tr>
+    </table>
+    <table style="width:100%">
+        <tr th:if="*{itemIndex} == -1">
+            <td style="width:50%">
+                <input id="registerItem" type="submit" value="Register" th:onclick="prepareModel(registerItem);" formaction="/registerItem" formmethod="post" class="general button" />
+            </td>
+            <td style="width:50%">
+                <input type="submit" value="Back" formaction="/" formmethod="post" class="general button" />
+            </td>
+        </tr>
+        <tr th:unless="*{itemIndex} == -1">
+            <td style="width:33%">
+                <input id="modifyItem" type="submit" value="Modify" th:onclick="prepareModel(modifyItem);" formaction="/modifyItem" formmethod="post" class="general button" />
+            </td>
+            <td style="width:34%">
+                <input id="deleteItem" type="submit" value="Delete" th:onclick="prepareModel(deleteItem);" formaction="/deleteItem" formmethod="post" class="general button" />
+            </td>
+            <td style="width:33%">
+                <input type="submit" value="Back" formaction="/" formmethod="post" class="general button" />
+            </td>
+        </tr>
+    </table>
+    <script th:inline="javascript">
+        <!-- Sets the disabled parameter of controls on purchase list manipulation. -->
+        function setControls() {
+            document.getElementById("registerItem").disabled = document.getElementById("value").value == "";
+            document.getElementById("modifyItem").disabled = document.getElementById("value").value == "";
+        }
+
+        <!-- Prepares model data before submitting. -->
+        function prepareModel(mode) {
+            *{itemIndex} = document.getElementById("itemIndex").value;
+            if (!mode.equals("deleteItem")) {
+                *{purchaseDate} = document.getElementById("date").value;
+                if (document.getElementById("ptCard1").selected || document.getElementById("ptCard2").selected || document.getElementById("ptCard3").selected) {
+                    *{purchaseType} = CARD;
+                }
+                else if (document.getElementById("ptCash1").selected || document.getElementById("ptCash2").selected || document.getElementById("ptCash3").selected) {
+                    *{purchaseType} = CASH;
+                }
+                else {
+                    *{purchaseType} = INTERNET;
+                }
+                *{purchaseValue} = document.getElementById("value").value;
+                *{purchaseDescription} = document.getElementById("description").value;
+            }
+        }
+    </script>
+</form>
+</body>
+</html>
