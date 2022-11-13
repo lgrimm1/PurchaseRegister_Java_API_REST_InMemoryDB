@@ -32,11 +32,11 @@ public class PurchaseList {
 		return optionalInt.isEmpty() ? 0 : optionalInt.getAsInt() + 1;
 	}
 
-	private int indexOf(int id) {
+	public int indexOf(int id) {
 		OptionalInt optionalInt = IntStream.range(0, purchaseList.size())
 				.filter(n -> purchaseList.get(n).getPurchaseId() == id)
 				.findFirst();
-		return optionalInt.isEmpty() ? 0 : optionalInt.getAsInt() + 1;
+		return optionalInt.isEmpty() ? -1 : optionalInt.getAsInt();
 	}
 
 	/**

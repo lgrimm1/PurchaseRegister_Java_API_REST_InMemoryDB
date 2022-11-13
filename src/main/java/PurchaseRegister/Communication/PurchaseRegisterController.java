@@ -20,3 +20,4 @@ public class PurchaseRegisterController {
 }
 
 //TODO test with writing curl commands into a file.
+//TODO write endpoints based on JSON.txt

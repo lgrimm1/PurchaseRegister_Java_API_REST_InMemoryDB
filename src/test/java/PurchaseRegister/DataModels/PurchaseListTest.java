@@ -129,7 +129,7 @@ class PurchaseListTest {
 		Assertions.assertEquals("abc", p.getPurchaseDescription());
 
 		p = pl.get(1);
-		Assertions.assertEquals(0, p.getPurchaseId());
+		Assertions.assertEquals(1, p.getPurchaseId());
 		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
 		Assertions.assertEquals(Purchase.PurchaseType.CARD, p.getPurchaseType());
 		Assertions.assertEquals(65.4d, p.getPurchaseValue());
@@ -204,7 +204,7 @@ class PurchaseListTest {
 		Assertions.assertEquals(10d, p.getPurchaseValue());
 		Assertions.assertEquals("abc", p.getPurchaseDescription());
 
-		p = pl.get(1);
+		p = pl.get(2);
 		Assertions.assertEquals(2, p.getPurchaseId());
 		Assertions.assertEquals(LocalDate.of(2012, 8, 4), p.getPurchaseDate());
 		Assertions.assertEquals(Purchase.PurchaseType.INTERNET, p.getPurchaseType());
