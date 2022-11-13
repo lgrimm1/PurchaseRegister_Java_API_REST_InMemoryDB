@@ -5,60 +5,74 @@ import java.util.*;
 
 /**
  * <b>This class represents a statistics map which stores processed Stat data.</b>
- * @see #StatMap()
+ * @see #StatMap(StatType)
+ * @see #getStatType()
  * @see #put(Purchase)
  * @see #get(LocalDate)
  * @see #count()
  * @author Laszlo Grimm
- * @since 06-11-2022
+ * @since 13-11-2022
  */
 public class StatMap {
 
-	private HashMap<LocalDate, Stat> statMap;
+	enum StatType {
+		ANNUAL, MONTHLY
+	}
 
-	/**
-	 * <b>Constructs an instance of StatMap.</b>
-	 */
-	public StatMap() {
+	private final HashMap<LocalDate, Stat> statMap;
+	private final StatType statType;
+
+	public StatMap(StatType statType) {
 		statMap = new HashMap<>();
+		this.statType = statType;
+	}
+
+	public StatType getStatType() {
+		return statType;
 	}
 
 	/**
-	 * <b>Creates a new or modifies an existing statistical data, based on the given Purchase, identified by date.</b><p>
+	 * <b>Creates or upgrades statistical data, based on the given Purchase.</b><p>
+	 * Converts purchase date following StatType of StatMap.<p>
 	 * In case of null argument, returns false.
-	 * @param newPurchase	Purchase of data to process.
-	 * @return				boolean of successfulness.
 	 */
 	public boolean put(Purchase newPurchase) {
 		if (newPurchase == null) {
 			return false;
 		}
-		Stat stat;
-		if (statMap.containsKey(newPurchase.getPurchaseDate())) {
-			stat = statMap.get(newPurchase.getPurchaseDate());
-			stat.addTotal(newPurchase.getPurchaseValue());
+		LocalDate usedDate = switch (statType) {
+			case ANNUAL -> usedDate = LocalDate.of(newPurchase.getPurchaseDate().getYear(), 1, 1);
+			case MONTHLY -> usedDate = LocalDate.of(newPurchase.getPurchaseDate().getYear(), newPurchase.getPurchaseDate().getMonthValue(), 1);
+		};
+		if (statMap.containsKey(usedDate)) {
+			Stat stat = statMap.get(usedDate);
+			statMap.put(usedDate, new Stat(stat.getTotal() + newPurchase.getPurchaseValue(), stat.getCount() + 1));
 		}
 		else {
-			stat = new Stat(newPurchase.getPurchaseValue());
+			statMap.put(usedDate, new Stat(newPurchase.getPurchaseValue(), 1));
 		}
-		statMap.put(newPurchase.getPurchaseDate(), stat);
 		return true;
 	}
 
 	/**
 	 * <b>Returns statistical data for the given date.</b>
-	 * In case the argument is null, returns null.
-	 * @param localDate	LocalDate of the key.
-	 * @return			Stat of corresponding statistical data.
+	 * Converts purchase date following StatType of StatMap.<p>
+	 * In case the argument is null or no proper key, returns null.
 	 */
 	public Stat get(LocalDate localDate) {
-		return statMap.get(localDate);
+		if (localDate == null) {
+			return null;
+		}
+		LocalDate usedDate = switch (statType) {
+			case ANNUAL -> usedDate = LocalDate.of(localDate.getYear(), 1, 1);
+			case MONTHLY -> usedDate = LocalDate.of(localDate.getYear(), localDate.getMonthValue(), 1);
+		};
+		if (statMap.containsKey(usedDate)) {
+			return statMap.get(usedDate).deepCopy();
+		}
+		return null;
 	}
 
-	/**
-	 * <b>Returns the number of stored statistical data.</b>
-	 * @return	int of stored data.
-	 */
 	public int count() {
 		return statMap.size();
 	}

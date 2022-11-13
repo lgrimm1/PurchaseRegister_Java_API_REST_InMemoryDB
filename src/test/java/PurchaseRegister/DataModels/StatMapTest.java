@@ -4,79 +4,157 @@ import org.junit.jupiter.api.*;
 
 import java.time.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class StatMapTest {
 
 	@Test
 	void newInstance() {
-		StatMap sm = new StatMap();
+		StatMap sm = new StatMap(StatMap.StatType.ANNUAL);
+		Assertions.assertEquals(StatMap.StatType.ANNUAL, sm.getStatType());
+		Assertions.assertEquals(0, sm.count());
+
+		sm = new StatMap(StatMap.StatType.MONTHLY);
+		Assertions.assertEquals(StatMap.StatType.MONTHLY, sm.getStatType());
 		Assertions.assertEquals(0, sm.count());
 	}
 
 	@Test
 	void addNullPurchase() {
-		StatMap sm = new StatMap();
+		StatMap sm = new StatMap(StatMap.StatType.ANNUAL);
+		Assertions.assertFalse(sm.put(null));
+		Assertions.assertEquals(0, sm.count());
+
+		sm = new StatMap(StatMap.StatType.MONTHLY);
 		Assertions.assertFalse(sm.put(null));
 		Assertions.assertEquals(0, sm.count());
 	}
 
 	@Test
-	void addValidPurchase() {
-		StatMap sm = new StatMap();
-		Assertions.assertTrue(sm.put(new Purchase(LocalDate.now(), Purchase.PurchaseType.CARD, 12d, "something")));
+	void addPurchaseToNewYear() {
+		StatMap sm = new StatMap(StatMap.StatType.ANNUAL);
+		Assertions.assertTrue(sm.put(new Purchase(1, LocalDate.of(2000, 6, 2), Purchase.PurchaseType.CARD, 12d, "something")));
 		Assertions.assertEquals(1, sm.count());
-		Assertions.assertEquals(12d, sm.get(LocalDate.now()).getTotal());
-		Assertions.assertEquals(1, sm.get(LocalDate.now()).getCount());
-		Assertions.assertEquals(12d, sm.get(LocalDate.now()).getAverage());
+
+		Stat stat = sm.get(LocalDate.of(2000, 6, 2));
+		Assertions.assertNotNull(stat);
+		Assertions.assertEquals(12d, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(12d, stat.getAverage());
+
+		stat = sm.get(LocalDate.of(2001, 6, 2));
+		Assertions.assertNull(stat);
+
+		stat = sm.get(LocalDate.of(2000, 7, 2));
+		Assertions.assertNotNull(stat);
+		Assertions.assertEquals(12d, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(12d, stat.getAverage());
+
+		stat = sm.get(LocalDate.of(2000, 6, 3));
+		Assertions.assertNotNull(stat);
+		Assertions.assertEquals(12d, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(12d, stat.getAverage());
 	}
 
 	@Test
-	void addValidDataDifferentDates() {
-		StatMap sm = new StatMap();
-		Assertions.assertTrue(sm.put(new Purchase(LocalDate.of(2000, 12, 1), Purchase.PurchaseType.CARD, 12d, "something")));
-		Assertions.assertTrue(sm.put(new Purchase(LocalDate.of(2001, 5, 11), Purchase.PurchaseType.CARD, 24d, "something2")));
+	void addPurchaseToNewMonth() {
+		StatMap sm = new StatMap(StatMap.StatType.MONTHLY);
+		Assertions.assertTrue(sm.put(new Purchase(1, LocalDate.of(2000, 6, 2), Purchase.PurchaseType.CARD, 12d, "something")));
+		Assertions.assertEquals(1, sm.count());
+
+		Stat stat = sm.get(LocalDate.of(2000, 6, 2));
+		Assertions.assertNotNull(stat);
+		Assertions.assertEquals(12d, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(12d, stat.getAverage());
+
+		stat = sm.get(LocalDate.of(2001, 6, 2));
+		Assertions.assertNull(stat);
+
+		stat = sm.get(LocalDate.of(2000, 7, 2));
+		Assertions.assertNull(stat);
+
+		stat = sm.get(LocalDate.of(2000, 6, 3));
+		Assertions.assertNotNull(stat);
+		Assertions.assertEquals(12d, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(12d, stat.getAverage());
+	}
+
+	@Test
+	void addPurchasesToSameYear() {
+		StatMap sm = new StatMap(StatMap.StatType.ANNUAL);
+		Assertions.assertTrue(sm.put(new Purchase(1, LocalDate.of(2000, 6, 2), Purchase.PurchaseType.CARD, 12d, "something")));
+		Assertions.assertTrue(sm.put(new Purchase(1, LocalDate.of(2000, 8, 3), Purchase.PurchaseType.CARD, 36d, "something")));
+
+		Assertions.assertEquals(1, sm.count());
+		Stat stat = sm.get(LocalDate.of(2000, 12, 1));
+		Assertions.assertNotNull(stat);
+		Assertions.assertEquals(48d, stat.getTotal());
+		Assertions.assertEquals(2, stat.getCount());
+		Assertions.assertEquals(24d, stat.getAverage());
+	}
+
+	@Test
+	void addPurchasesToDifferentYears() {
+		StatMap sm = new StatMap(StatMap.StatType.ANNUAL);
+		Assertions.assertTrue(sm.put(new Purchase(1, LocalDate.of(2000, 6, 2), Purchase.PurchaseType.CARD, 12d, "something")));
+		Assertions.assertTrue(sm.put(new Purchase(1, LocalDate.of(2001, 6, 2), Purchase.PurchaseType.CARD, 36d, "something")));
 
 		Assertions.assertEquals(2, sm.count());
 
-		Assertions.assertEquals(12d, sm.get(LocalDate.of(2000, 12, 1)).getTotal());
-		Assertions.assertEquals(1, sm.get(LocalDate.of(2000, 12, 1)).getCount());
-		Assertions.assertEquals(12d, sm.get(LocalDate.of(2000, 12, 1)).getAverage());
+		Stat stat = sm.get(LocalDate.of(2000, 12, 12));
+		Assertions.assertNotNull(stat);
+		Assertions.assertEquals(12d, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(12d, stat.getAverage());
 
-		Assertions.assertEquals(24d, sm.get(LocalDate.of(2001, 5, 11)).getTotal());
-		Assertions.assertEquals(1, sm.get(LocalDate.of(2001, 5, 11)).getCount());
-		Assertions.assertEquals(24d, sm.get(LocalDate.of(2001, 5, 11)).getAverage());
+		stat = sm.get(LocalDate.of(2001, 12, 12));
+		Assertions.assertNotNull(stat);
+		Assertions.assertEquals(36d, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(36d, stat.getAverage());
 	}
 
 	@Test
-	void addValidDataSameDate() {
-		StatMap sm = new StatMap();
-		Assertions.assertTrue(sm.put(new Purchase(LocalDate.of(2000, 12, 1), Purchase.PurchaseType.CARD, 12d, "something")));
-		Assertions.assertTrue(sm.put(new Purchase(LocalDate.of(2000, 12, 1), Purchase.PurchaseType.CARD, 24d, "something2")));
+	void addPurchasesToSameMonth() {
+		StatMap sm = new StatMap(StatMap.StatType.MONTHLY);
+		Assertions.assertTrue(sm.put(new Purchase(1, LocalDate.of(2000, 6, 2), Purchase.PurchaseType.CARD, 12d, "something")));
+		Assertions.assertTrue(sm.put(new Purchase(1, LocalDate.of(2000, 6, 3), Purchase.PurchaseType.CARD, 36d, "something")));
 
 		Assertions.assertEquals(1, sm.count());
-		Assertions.assertEquals(36d, sm.get(LocalDate.of(2000, 12, 1)).getTotal());
-		Assertions.assertEquals(2, sm.get(LocalDate.of(2000, 12, 1)).getCount());
-		Assertions.assertEquals(18d, sm.get(LocalDate.of(2000, 12, 1)).getAverage());
+		Stat stat = sm.get(LocalDate.of(2000, 6, 1));
+		Assertions.assertNotNull(stat);
+		Assertions.assertEquals(48d, stat.getTotal());
+		Assertions.assertEquals(2, stat.getCount());
+		Assertions.assertEquals(24d, stat.getAverage());
 	}
 
 	@Test
-	void addMoreData() {
-		StatMap sm = new StatMap();
-		Assertions.assertTrue(sm.put(new Purchase(LocalDate.of(2000, 12, 1), Purchase.PurchaseType.CARD, 12d, "something")));
-		Assertions.assertTrue(sm.put(new Purchase(LocalDate.of(2000, 12, 1), Purchase.PurchaseType.CARD, 24d, "something2")));
-		Assertions.assertTrue(sm.put(new Purchase(LocalDate.of(2001, 5, 11), Purchase.PurchaseType.CARD, 2d, "something2")));
-		Assertions.assertTrue(sm.put(new Purchase(LocalDate.of(2001, 5, 11), Purchase.PurchaseType.CARD, 6d, "something2")));
-		Assertions.assertTrue(sm.put(new Purchase(LocalDate.of(2001, 5, 11), Purchase.PurchaseType.CARD, 4d, "something2")));
+	void addPurchasesToDifferentMonths() {
+		StatMap sm = new StatMap(StatMap.StatType.MONTHLY);
+		Assertions.assertTrue(sm.put(new Purchase(1, LocalDate.of(2000, 6, 2), Purchase.PurchaseType.CARD, 12d, "something")));
+		Assertions.assertTrue(sm.put(new Purchase(1, LocalDate.of(2000, 8, 2), Purchase.PurchaseType.CARD, 36d, "something")));
+		Assertions.assertTrue(sm.put(new Purchase(1, LocalDate.of(2001, 6, 2), Purchase.PurchaseType.CARD, 50d, "something")));
 
-		Assertions.assertEquals(2, sm.count());
+		Assertions.assertEquals(3, sm.count());
 
-		Assertions.assertEquals(36d, sm.get(LocalDate.of(2000, 12, 1)).getTotal());
-		Assertions.assertEquals(2, sm.get(LocalDate.of(2000, 12, 1)).getCount());
-		Assertions.assertEquals(18d, sm.get(LocalDate.of(2000, 12, 1)).getAverage());
+		Stat stat = sm.get(LocalDate.of(2000, 6, 12));
+		Assertions.assertNotNull(stat);
+		Assertions.assertEquals(12d, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(12d, stat.getAverage());
 
-		Assertions.assertEquals(12d, sm.get(LocalDate.of(2001, 5, 11)).getTotal());
-		Assertions.assertEquals(3, sm.get(LocalDate.of(2001, 5, 11)).getCount());
-		Assertions.assertEquals(4d, sm.get(LocalDate.of(2001, 5, 11)).getAverage());
+		stat = sm.get(LocalDate.of(2000, 8, 12));
+		Assertions.assertNotNull(stat);
+		Assertions.assertEquals(36d, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(36d, stat.getAverage());
+
+		stat = sm.get(LocalDate.of(2001, 6, 12));
+		Assertions.assertNotNull(stat);
+		Assertions.assertEquals(50d, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(50d, stat.getAverage());
 	}
 }
