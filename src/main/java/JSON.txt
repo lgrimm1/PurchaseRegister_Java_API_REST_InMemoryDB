@@ -1,16 +1,18 @@
 Endpoints
 -------------------
-GET /purchases/id                     response:  {"id": <integer>, "date": <YYYY.MM.DD>, "type": "CARD"|"CASH"|"INTERNET", "value": <double, max. 2 precision digits>, "description": <string>}
-PUT /purchase                         request body: {"date": <YYYY.MM.DD>, "type": "CARD"|"CASH"|"INTERNET", "value": <double, max. 2 precision digits>, "description": <string>}
-PUT /purchases/id                     request body: {"date": <YYYY.MM.DD>, "type": "CARD"|"CASH"|"INTERNET", "value": <double, max. 2 precision digits>, "description": <string>}
-DELETE /purchases/id
+GET /purchase/id                        response: {"id": <integer>, "date": <YYYY-MM-DD>, "type": CARD|CASH|INTERNET, "value": <double, max. 2 precision digits>, "description": <string>}
+PUT /purchase                           request body: {"date": <YYYY-MM-DD>, "type": "CARD"|"CASH"|"INTERNET", "value": <double, max. 2 precision digits>, "description": <string>}
+                                        response: {"id": <integer>}
+PUT /purchase/id                        request body: {"date": <YYYY-MM-DD>, "type": "CARD"|"CASH"|"INTERNET", "value": <double, max. 2 precision digits>, "description": <string>}
+                                        response: {true|false}
+DELETE /purchase/id                     response: {true|false}
+GET /purchases                          response:  {"purchases": [{"id": <integer>, "date": <YYYY-MM-DD>, "type": CARD|CASH|INTERNET, "value": <double, max. 2 precision digits>, "description": <string>}, ...]}
+DELETE /purchases                       request body: {"ids": ["id1", "id2", ...]}
+GET /stat/annual?year=                  response: {"stats": [{"year": <integer>, "total": <double>, "count": <integer>, "average": <double>}, ...]}
+GET /stat/monthly?year=...&month=...    response: {"stats": [{"year": <integer>, "month": <integer>, "total": <double>, "count": <integer>, "average": <double>}, ...]}
 
-GET /purchases                        response:  {"purchases": [{"id": <integer>, "date": <YYYY.MM.DD>, "type": "CARD"|"CASH"|"INTERNET", "value": <double, max. 2 precision digits>, "description": <string>}, ...]}
-DELETE /purchases                     request body: {"ids": ["id1", "id2", ...]}
-
-GET /stat/annual?year=                response: {"stats": [{"year": <integer>, "total": <double>, "count": <integer>, "average": <double>}, ...]}
-GET /stat/monthly?year=...&month=...  response: {"stats": [{"year": <integer>, "month": <integer>, "total": <double>, "count": <integer>, "average": <double>}, ...]}
-
-https://www.baeldung.com/spring-pathvariable?fbclid=IwAR3kM1HNjuWhVpVn-Jn6Pt54yewM_bR_RKNtapM0UFTYOGBb8-Dladi2ZpY
 https://spring.io/guides/gs/testing-web/?fbclid=IwAR17atKahB5iLbtxG7UCE6iGP-yK4SXYN7efsC0CS00LFEHVORBKZ1_0fMM
 https://www.baeldung.com/java-comparator-comparable?fbclid=IwAR3kM1HNjuWhVpVn-Jn6Pt54yewM_bR_RKNtapM0UFTYOGBb8-Dladi2ZpY
+https://thepracticaldeveloper.com/guide-spring-boot-controller-tests/
+https://spring.io/guides/tutorials/rest/
+https://www.genuitec.com/spring-frameworkrestcontroller-vs-controller/

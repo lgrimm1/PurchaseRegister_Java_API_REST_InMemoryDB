@@ -1,16 +1,17 @@
 package PurchaseRegister.DataModels;
 
+import java.io.*;
+
 /**
- * <b>This class represents a statistics element.</b>
+ * This class represents a statistics element.
  * @see #Stat(double, int)
  * @see #getTotal()
  * @see #getCount()
  * @see #getAverage()
  * @see #deepCopy()
  * @author Laszlo Grimm
- * @since 13-11-2022
  */
-public class Stat {
+public class Stat implements Serializable {
 
 	private final double total;
 	private final int count;

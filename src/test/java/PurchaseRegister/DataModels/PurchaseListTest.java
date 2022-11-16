@@ -3,6 +3,7 @@ package PurchaseRegister.DataModels;
 import org.junit.jupiter.api.*;
 
 import java.time.*;
+import java.util.*;
 
 class PurchaseListTest {
 
@@ -15,7 +16,7 @@ class PurchaseListTest {
 	@Test
 	void  addPurchaseNullArguments() {
 		PurchaseList pl = new PurchaseList();
-		pl.add(null, Purchase.PurchaseType.CARD, 65.4d, null);
+		Assertions.assertEquals(0, pl.add(null, Purchase.PurchaseType.CARD, 65.4d, null));
 		Assertions.assertEquals(1, pl.count());
 		Purchase p = pl.get(0);
 		Assertions.assertEquals(0, p.getPurchaseId());
@@ -28,7 +29,7 @@ class PurchaseListTest {
 	@Test
 	void addCardPurchase() {
 		PurchaseList pl = new PurchaseList();
-		pl.add(LocalDate.now(), Purchase.PurchaseType.CARD, 65.4d, "something");
+		Assertions.assertEquals(0, pl.add(LocalDate.now(), Purchase.PurchaseType.CARD, 65.4d, "something"));
 		Assertions.assertEquals(1, pl.count());
 		Purchase p = pl.get(0);
 		Assertions.assertEquals(0, p.getPurchaseId());
@@ -41,7 +42,7 @@ class PurchaseListTest {
 	@Test
 	void addCashPurchase() {
 		PurchaseList pl = new PurchaseList();
-		pl.add(LocalDate.now(), Purchase.PurchaseType.CASH, 65.4d, "something");
+		Assertions.assertEquals(0, pl.add(LocalDate.now(), Purchase.PurchaseType.CASH, 65.4d, "something"));
 		Assertions.assertEquals(1, pl.count());
 		Purchase p = pl.get(0);
 		Assertions.assertEquals(0, p.getPurchaseId());
@@ -54,7 +55,7 @@ class PurchaseListTest {
 	@Test
 	void addInternetPurchase() {
 		PurchaseList pl = new PurchaseList();
-		pl.add(LocalDate.now(), Purchase.PurchaseType.INTERNET, 65.4d, "something");
+		Assertions.assertEquals(0, pl.add(LocalDate.now(), Purchase.PurchaseType.INTERNET, 65.4d, "something"));
 		Assertions.assertEquals(1, pl.count());
 		Purchase p = pl.get(0);
 		Assertions.assertEquals(0, p.getPurchaseId());
@@ -67,8 +68,8 @@ class PurchaseListTest {
 	@Test
 	void addMoreElements() {
 		PurchaseList pl = new PurchaseList();
-		pl.add(LocalDate.of(2010, 3, 5), Purchase.PurchaseType.CARD, 10d, "abc");
-		pl.add(LocalDate.of(2011, 4, 6), Purchase.PurchaseType.CASH, 20d, "xyz");
+		Assertions.assertEquals(0, pl.add(LocalDate.of(2010, 3, 5), Purchase.PurchaseType.CARD, 10d, "abc"));
+		Assertions.assertEquals(1, pl.add(LocalDate.of(2011, 4, 6), Purchase.PurchaseType.CASH, 20d, "xyz"));
 		Assertions.assertEquals(2, pl.count());
 
 		Purchase p = pl.get(0);
@@ -220,5 +221,18 @@ class PurchaseListTest {
 		pl.add(LocalDate.of(2012, 8, 4), Purchase.PurchaseType.INTERNET, 30d, "ooo");
 		pl.clear();
 		Assertions.assertEquals(0, pl.count());
+	}
+
+	@Test
+	void stream() {
+		PurchaseList pl = new PurchaseList();
+		pl.add(LocalDate.of(2010, 3, 5), Purchase.PurchaseType.CARD, 10d, "abc");
+		pl.add(LocalDate.of(2011, 4, 6), Purchase.PurchaseType.CASH, 20d, "xyz");
+		pl.add(LocalDate.of(2012, 8, 4), Purchase.PurchaseType.INTERNET, 30d, "ooo");
+		List<Purchase> plist = pl.stream().toList();
+		Assertions.assertEquals(3, plist.size());
+		Assertions.assertEquals(pl.get(0), plist.get(0));
+		Assertions.assertEquals(pl.get(1), plist.get(1));
+		Assertions.assertEquals(pl.get(2), plist.get(2));
 	}
 }

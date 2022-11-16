@@ -4,14 +4,13 @@ import java.time.*;
 import java.util.*;
 
 /**
- * <b>This class represents a statistics map which stores processed Stat data.</b>
+ * This class represents a statistics map which stores processed Stat data.
  * @see #StatMap(StatType)
  * @see #getStatType()
  * @see #put(Purchase)
  * @see #get(LocalDate)
  * @see #count()
  * @author Laszlo Grimm
- * @since 13-11-2022
  */
 public class StatMap {
 
@@ -32,8 +31,8 @@ public class StatMap {
 	}
 
 	/**
-	 * <b>Creates or upgrades statistical data, based on the given Purchase.</b><p>
-	 * Converts purchase date following StatType of StatMap.<p>
+	 * Creates or upgrades statistical data.<p>
+	 * Converts purchase date based on statType.<p>
 	 * In case of null argument, returns false.
 	 */
 	public boolean put(Purchase newPurchase) {
@@ -55,8 +54,7 @@ public class StatMap {
 	}
 
 	/**
-	 * <b>Returns statistical data for the given date.</b>
-	 * Converts purchase date following StatType of StatMap.<p>
+	 * Converts date based on statType to find key.<p>
 	 * In case the argument is null or no proper key, returns null.
 	 */
 	public Stat get(LocalDate localDate) {

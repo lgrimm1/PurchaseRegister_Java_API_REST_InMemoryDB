@@ -1,22 +1,18 @@
 package PurchaseRegister.DataModels;
 
-import PurchaseRegister.Helpers.*;
-
+import java.io.*;
 import java.time.*;
 
 /**
- * <b>This class represents a purchase.</b>
+ * This class represents a purchase.
  * @see #Purchase(int, LocalDate, PurchaseType, double, String)
  * @see #getPurchaseDate()
  * @see #getPurchaseType()
  * @see #getPurchaseValue()
  * @see #getPurchaseDescription()
-// * @see #getPurchaseTypeString()
  * @author Laszlo Grimm
- * @since 13-11-2022
  */
-//public class Purchase implements Comparable<Purchase> {
-public class Purchase {
+public class Purchase implements Serializable {
 
 	public enum PurchaseType {
 			CARD, CASH, INTERNET
@@ -28,7 +24,6 @@ public class Purchase {
 	private final String purchaseDescription;
 
 	/**
-	 * <b>Constructs an instance with the given date.</b><p>
 	 * In case the given date is null, uses current local date.<p>
 	 * In case the given description is null, uses empty String.
 	 */
@@ -59,14 +54,4 @@ public class Purchase {
 	public String getPurchaseDescription() {
 		return purchaseDescription;
 	}
-
-/*
-	public String getPurchaseTypeString() {
-		return switch (purchaseType) {
-			case CARD -> "CARD";
-			case CASH -> "CASH";
-			case INTERNET -> "INET";
-		};
-	}
-*/
 }

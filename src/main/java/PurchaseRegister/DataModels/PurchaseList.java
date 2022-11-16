@@ -5,16 +5,17 @@ import java.util.*;
 import java.util.stream.*;
 
 /**
- * <b>This class represents a purchase list with Purchase element type.</b>
+ * This class represents a purchase list with Purchase element type.
  * @see #PurchaseList()
+ * @see #indexOf(int)
  * @see #get(int)
  * @see #add(LocalDate, Purchase.PurchaseType, double, String)
  * @see #modify(int, LocalDate, Purchase.PurchaseType, double, String)
  * @see #delete(int)
  * @see #count()
  * @see #clear()
+ * @see #stream()
  * @author Laszlo Grimm
- * @since 13-11-2022
  */
 public class PurchaseList {
 
@@ -40,7 +41,6 @@ public class PurchaseList {
 	}
 
 	/**
-	 * <b>Returns a TPurchase element at the given ID.</b><p>
 	 * In case the ID is not valid, returns null.
 	 */
 	public Purchase get(int id) {
@@ -48,8 +48,13 @@ public class PurchaseList {
 		return itemIndex == -1 ? null : purchaseList.get(itemIndex);
 	}
 
-	public void add(LocalDate dateOfPurchase, Purchase.PurchaseType typeOfPurchase, double valueOfPurchase, String descriptionOfPurchase) {
-		purchaseList.add(new Purchase(nextID(), dateOfPurchase, typeOfPurchase, valueOfPurchase, descriptionOfPurchase));
+	/**
+	 * Returns the ID of the added Purchase.
+	 */
+	public int add(LocalDate dateOfPurchase, Purchase.PurchaseType typeOfPurchase, double valueOfPurchase, String descriptionOfPurchase) {
+		int id = nextID();
+		purchaseList.add(new Purchase(id, dateOfPurchase, typeOfPurchase, valueOfPurchase, descriptionOfPurchase));
+		return id;
 	}
 
 	public boolean modify(int id, LocalDate dateOfPurchase, Purchase.PurchaseType typeOfPurchase, double valueOfPurchase, String descriptionOfPurchase) {
@@ -76,5 +81,9 @@ public class PurchaseList {
 
 	public void clear() {
 		purchaseList.clear();
+	}
+
+	public Stream<Purchase> stream() {
+		return purchaseList.stream();
 	}
 }

@@ -3,10 +3,8 @@ package PurchaseRegister.Storage;
 import PurchaseRegister.DataModels.*;
 
 /**
- * <b>This class provides data storage.</b><p>
- * All public methods are static.
+ * This class provides data storage.
  * @author Laszlo Grimm
- * @since 10-11-2022
  */
 public class Data {
 
