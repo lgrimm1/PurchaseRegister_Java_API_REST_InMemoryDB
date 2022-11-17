@@ -11,7 +11,7 @@ import java.io.*;
  * @see #deepCopy()
  * @author Laszlo Grimm
  */
-public class Stat implements Serializable {
+public class Stat {
 
 	private final double total;
 	private final int count;

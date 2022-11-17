@@ -1,5 +1,7 @@
 package PurchaseRegister.DataModels;
 
+import java.io.*;
+
 /**
  * This class represent data element of annual statistical data transfer towards frontend.
  * @see #StatAnnualTransfer(int, double, int, double)
@@ -9,7 +11,7 @@ package PurchaseRegister.DataModels;
  * @see #getAverage()
  * @author Laszlo Grimm
  */
-public class StatAnnualTransfer {
+public class StatAnnualTransfer implements Serializable {
 	private final Integer year;
 	private final Double total;
 	private final Integer count;
