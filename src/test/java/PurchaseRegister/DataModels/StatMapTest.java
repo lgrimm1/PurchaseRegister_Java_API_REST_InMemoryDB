@@ -3,6 +3,8 @@ package PurchaseRegister.DataModels;
 import org.junit.jupiter.api.*;
 
 import java.time.*;
+import java.util.*;
+import java.util.stream.*;
 
 class StatMapTest {
 
@@ -156,5 +158,24 @@ class StatMapTest {
 		Assertions.assertEquals(50d, stat.getTotal());
 		Assertions.assertEquals(1, stat.getCount());
 		Assertions.assertEquals(50d, stat.getAverage());
+	}
+
+	@Test
+	void exportStream() {
+		StatMap sm = new StatMap(StatMap.StatType.ANNUAL);
+		sm.put(new Purchase(1, LocalDate.of(2000, 6, 2), Purchase.PurchaseType.CARD, 12d, "something"));
+		sm.put(new Purchase(2, LocalDate.of(2000, 8, 12), Purchase.PurchaseType.CARD, 24d, "something"));
+		sm.put(new Purchase(3, LocalDate.of(2001, 12, 2), Purchase.PurchaseType.CARD, 36d, "something"));
+		Assertions.assertEquals(2, sm.stream().count());
+		int yearAsSummarizedValue = sm.stream()
+				.map(entry -> entry.getKey().getYear())
+				.mapToInt(n -> n)
+				.sum();
+		Assertions.assertEquals(4001, yearAsSummarizedValue);
+		double totalValue = sm.stream()
+				.map(entry -> entry.getValue().getTotal())
+				.mapToDouble(n -> n)
+				.sum();
+		Assertions.assertEquals(72d, totalValue);
 	}
 }

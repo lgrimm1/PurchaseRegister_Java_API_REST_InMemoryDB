@@ -50,7 +50,16 @@ public class PurchaseRegisterController {
 	public List<Integer> deletePurchases(@RequestBody List<Integer> idList) {
 		return ControllerHelper.deletePurchasesHelper(idList);
 	}
-}
 
-//TODO test with writing curl commands into a file.
-//TODO write endpoints based on JSON.txt
+	@GetMapping("/stat/annual")
+	@ResponseBody
+	public List<StatAnnualTransfer> statAnnual() {
+		return ControllerHelper.statAnnualHelper();
+	}
+
+	@GetMapping("/stat/monthly")
+	@ResponseBody
+	public List<StatMonthlyTransfer> statMonthly() {
+		return ControllerHelper.statMonthlyHelper();
+	}
+}

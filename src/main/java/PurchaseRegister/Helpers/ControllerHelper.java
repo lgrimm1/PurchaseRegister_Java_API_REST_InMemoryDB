@@ -1,10 +1,8 @@
 package PurchaseRegister.Helpers;
 
 import PurchaseRegister.DataModels.*;
-import org.springframework.ui.*;
 
 import java.time.*;
-import java.time.format.*;
 import java.util.*;
 
 import static PurchaseRegister.Storage.Data.purchaseList;
@@ -14,12 +12,6 @@ import static PurchaseRegister.Storage.Data.purchaseList;
  * @author Laszlo Grimm
  */
 public class ControllerHelper {
-
-	public static final String noSuchPurchasePage = "noSuchPurchasePage";
-	public static final String purchasePage = "purchasePage";
-	public static final String unsuccessfulNewPurchasePage = "unsuccessfulNewPurchasePage";
-	public static final String successfulNewPurchasePage = "successfulNewPurchasePage";
-	private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
 
 	public static Purchase getPurchaseByIdHelper(String idText) {
 		if (idText == null) {
@@ -93,33 +85,21 @@ public class ControllerHelper {
 		return deleted;
 	}
 
-	/**
-	 * In case of wrong input, returns null.
-	 */
-	private static LocalDate dateTextToDate(String dateText) {
-		if (dateText == null) {
-			return null;
-		}
-		try {
-			return LocalDate.parse(dateText, dateTimeFormatter);
-		}
-		catch (Exception e) {
-			return null;
-		}
+	public static List<StatAnnualTransfer> statAnnualHelper() {
+		StatMap statMap = new StatMap(StatMap.StatType.ANNUAL);
+		purchaseList.stream()
+				.forEach(statMap::put);
+		return statMap.stream()
+				.map(entry -> new StatAnnualTransfer(entry.getKey().getYear(), entry.getValue().getTotal(), entry.getValue().getCount(), entry.getValue().getAverage()))
+				.toList();
 	}
 
-	/**
-	 * In case of wrong input, returns null.
-	 */
-	private static Purchase.PurchaseType typeTextToType(String typeText) {
-		if (typeText == null || typeText.isEmpty()) {
-			return null;
-		}
-		return switch (typeText) {
-			case "CARD" -> Purchase.PurchaseType.CARD;
-			case "CASH" -> Purchase.PurchaseType.CASH;
-			case "INTERNET" -> Purchase.PurchaseType.INTERNET;
-			default -> null;
-		};
+	public static List<StatMonthlyTransfer> statMonthlyHelper() {
+		StatMap statMap = new StatMap(StatMap.StatType.MONTHLY);
+		purchaseList.stream()
+				.forEach(statMap::put);
+		return statMap.stream()
+				.map(entry -> new StatMonthlyTransfer(entry.getKey().getYear(), entry.getKey().getMonthValue(), entry.getValue().getTotal(), entry.getValue().getCount(), entry.getValue().getAverage()))
+				.toList();
 	}
 }

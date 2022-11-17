@@ -2,19 +2,21 @@ package PurchaseRegister.DataModels;
 
 import java.time.*;
 import java.util.*;
+import java.util.stream.*;
 
 /**
- * This class represents a statistics map which stores processed Stat data.
+ * This class represents a statistics map which stores Stat data for annual or monthly periods.
  * @see #StatMap(StatType)
  * @see #getStatType()
  * @see #put(Purchase)
  * @see #get(LocalDate)
  * @see #count()
+ * @see #stream()
  * @author Laszlo Grimm
  */
 public class StatMap {
 
-	enum StatType {
+	public enum StatType {
 		ANNUAL, MONTHLY
 	}
 
@@ -73,5 +75,12 @@ public class StatMap {
 
 	public int count() {
 		return statMap.size();
+	}
+
+	/**
+	 * Returns Stream&lt;Map.Entry&lt;LocalDate, Stat&gt;&gt;
+	 */
+	public Stream<Map.Entry<LocalDate, Stat>> stream() {
+		return statMap.entrySet().stream();
 	}
 }

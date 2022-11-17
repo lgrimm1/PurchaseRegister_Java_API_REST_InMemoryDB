@@ -8,16 +8,19 @@ import java.time.*;
 import java.util.*;
 
 import static PurchaseRegister.Storage.Data.purchaseList;
+import PurchaseRegister.DataModels.Stat;
+import PurchaseRegister.DataModels.StatMap;
 
 class ControllerHelperTest {
 
 	@BeforeEach
 	void setUp() {
 		purchaseList.add(LocalDate.of(2000, 5, 6), Purchase.PurchaseType.CARD, 12d, "abc");
-		purchaseList.add(LocalDate.of(2001, 6, 7), Purchase.PurchaseType.CASH, 24d, "xyz");
-		purchaseList.add(LocalDate.of(2002, 7, 8), Purchase.PurchaseType.INTERNET, 36d, "ooo");
-		purchaseList.add(LocalDate.of(2003, 8, 9), Purchase.PurchaseType.CARD, 48d, "123");
-		purchaseList.add(LocalDate.of(2004, 9, 10), Purchase.PurchaseType.CASH, 60d, "000");
+		purchaseList.add(LocalDate.of(2002, 3, 8), Purchase.PurchaseType.INTERNET, 36d, "ooo");
+		purchaseList.add(LocalDate.of(2002, 7, 4), Purchase.PurchaseType.INTERNET, 72d, "ooo");
+		purchaseList.add(LocalDate.of(2003, 3, 9), Purchase.PurchaseType.CARD, 48d, "123");
+		purchaseList.add(LocalDate.of(2003, 8, 3), Purchase.PurchaseType.CARD, 100d, "123");
+		purchaseList.add(LocalDate.of(2003, 8, 5), Purchase.PurchaseType.CARD, 35d, "123");
 	}
 
 	@AfterEach
@@ -144,5 +147,62 @@ class ControllerHelperTest {
 	@Test
 	void deleteManyRightList() {
 		Assertions.assertEquals(List.of(1, 2, 3), ControllerHelper.deletePurchasesHelper(List.of(1, 2, 3, 32, 64)));
+	}
+
+	@Test
+	void statAnnual() {
+		List<StatAnnualTransfer> list = ControllerHelper.statAnnualHelper();
+		Assertions.assertEquals(3, list.size());
+
+		Assertions.assertEquals(2000, list.get(0).getYear());
+		Assertions.assertEquals(12d, list.get(0).getTotal());
+		Assertions.assertEquals(1, list.get(0).getCount());
+		Assertions.assertEquals(12d, list.get(0).getAverage());
+
+		Assertions.assertEquals(2002, list.get(1).getYear());
+		Assertions.assertEquals(108d, list.get(1).getTotal());
+		Assertions.assertEquals(2, list.get(1).getCount());
+		Assertions.assertEquals(54d, list.get(1).getAverage());
+
+		Assertions.assertEquals(2003, list.get(2).getYear());
+		Assertions.assertEquals(183d, list.get(2).getTotal());
+		Assertions.assertEquals(3, list.get(2).getCount());
+		Assertions.assertEquals(61d, list.get(2).getAverage());
+	}
+
+	@Test
+	void statMonthly() {
+		List<StatMonthlyTransfer> list = ControllerHelper.statMonthlyHelper();
+		Assertions.assertEquals(5, list.size());
+
+		Assertions.assertEquals(2000, list.get(0).getYear());
+		Assertions.assertEquals(5, list.get(0).getMonth());
+		Assertions.assertEquals(12d, list.get(0).getTotal());
+		Assertions.assertEquals(1, list.get(0).getCount());
+		Assertions.assertEquals(12d, list.get(0).getAverage());
+
+		Assertions.assertEquals(2002, list.get(1).getYear());
+		Assertions.assertEquals(3, list.get(1).getMonth());
+		Assertions.assertEquals(36d, list.get(1).getTotal());
+		Assertions.assertEquals(1, list.get(1).getCount());
+		Assertions.assertEquals(36d, list.get(1).getAverage());
+
+		Assertions.assertEquals(2002, list.get(2).getYear());
+		Assertions.assertEquals(7, list.get(2).getMonth());
+		Assertions.assertEquals(72d, list.get(2).getTotal());
+		Assertions.assertEquals(1, list.get(2).getCount());
+		Assertions.assertEquals(72d, list.get(2).getAverage());
+
+		Assertions.assertEquals(2003, list.get(3).getYear());
+		Assertions.assertEquals(3, list.get(3).getMonth());
+		Assertions.assertEquals(48d, list.get(3).getTotal());
+		Assertions.assertEquals(1, list.get(3).getCount());
+		Assertions.assertEquals(48d, list.get(3).getAverage());
+
+		Assertions.assertEquals(2003, list.get(4).getYear());
+		Assertions.assertEquals(8, list.get(4).getMonth());
+		Assertions.assertEquals(135d, list.get(4).getTotal());
+		Assertions.assertEquals(2, list.get(4).getCount());
+		Assertions.assertEquals(67.5d, list.get(4).getAverage());
 	}
 }
