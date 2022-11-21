@@ -1,39 +1,41 @@
-package PurchaseRegister.DataModels;
+package PurchaseRegister.Spring;
+
+import PurchaseRegister.DataModels.*;
+import org.springframework.stereotype.*;
 
 import java.time.*;
 import java.util.*;
 import java.util.stream.*;
 
 /**
- * This class represents a purchase list with Purchase element type.
- * @see #PurchaseList()
- * @see #indexOf(int)
- * @see #get(int)
+ * Storage class of PurchaseService class.
+ * @see #PurchaseStorage()
+ * @see #nextID()
+ * @see #get(long)
  * @see #add(LocalDate, Purchase.PurchaseType, double, String)
- * @see #modify(int, LocalDate, Purchase.PurchaseType, double, String)
- * @see #delete(int)
+ * @see #modify(long, LocalDate, Purchase.PurchaseType, double, String)
+ * @see #delete(long)
  * @see #count()
  * @see #clear()
  * @see #stream()
  * @author Laszlo Grimm
  */
-public class PurchaseList {
+@Repository
+public class PurchaseStorage {
 
 	private final List<Purchase> purchaseList;
+	private Long maxId;
 
-	public PurchaseList() {
+	public PurchaseStorage() {
 		purchaseList = new ArrayList<>();
+		maxId = null;
 	}
 
-	private int nextID() {
-		OptionalInt optionalInt = purchaseList.stream()
-				.map(Purchase::getPurchaseId)
-				.mapToInt(id -> id)
-				.max();
-		return optionalInt.isEmpty() ? 0 : optionalInt.getAsInt() + 1;
+	private long nextID() {
+		return maxId == null ? Long.MIN_VALUE : maxId + 1;
 	}
 
-	public int indexOf(int id) {
+	private int indexOf(long id) {
 		OptionalInt optionalInt = IntStream.range(0, purchaseList.size())
 				.filter(n -> purchaseList.get(n).getPurchaseId() == id)
 				.findFirst();
@@ -43,7 +45,7 @@ public class PurchaseList {
 	/**
 	 * In case the ID is not valid, returns null.
 	 */
-	public Purchase get(int id) {
+	public Purchase get(long id) {
 		int itemIndex = indexOf(id);
 		return itemIndex == -1 ? null : purchaseList.get(itemIndex);
 	}
@@ -51,13 +53,13 @@ public class PurchaseList {
 	/**
 	 * Returns the ID of the added Purchase.
 	 */
-	public int add(LocalDate dateOfPurchase, Purchase.PurchaseType typeOfPurchase, double valueOfPurchase, String descriptionOfPurchase) {
-		int id = nextID();
-		purchaseList.add(new Purchase(id, dateOfPurchase, typeOfPurchase, valueOfPurchase, descriptionOfPurchase));
-		return id;
+	public long add(LocalDate dateOfPurchase, Purchase.PurchaseType typeOfPurchase, double valueOfPurchase, String descriptionOfPurchase) {
+		maxId = nextID();
+		purchaseList.add(new Purchase(maxId, dateOfPurchase, typeOfPurchase, valueOfPurchase, descriptionOfPurchase));
+		return maxId;
 	}
 
-	public boolean modify(int id, LocalDate dateOfPurchase, Purchase.PurchaseType typeOfPurchase, double valueOfPurchase, String descriptionOfPurchase) {
+	public boolean modify(long id, LocalDate dateOfPurchase, Purchase.PurchaseType typeOfPurchase, double valueOfPurchase, String descriptionOfPurchase) {
 		int itemIndex = indexOf(id);
 		if (itemIndex == -1) {
 			return false;
@@ -66,7 +68,7 @@ public class PurchaseList {
 		return true;
 	}
 
-	public boolean delete(int id) {
+	public boolean delete(long id) {
 		int itemIndex = indexOf(id);
 		if (itemIndex == -1) {
 			return false;

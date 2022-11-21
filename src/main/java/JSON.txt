@@ -1,12 +1,13 @@
 Endpoints
 -------------------
-GET /purchase/id        response: {"id": <integer>, "date": <YYYY-MM-DD>, "type": CARD|CASH|INTERNET, "value": <double, max. 2 precision digits>, "description": <string>}
-PUT /purchase           request body: {"date": <YYYY-MM-DD>, "type": "CARD"|"CASH"|"INTERNET", "value": <double, max. 2 precision digits>, "description": <string>}
-                        response: {"id": <integer>}
-PUT /purchase/id        request body: {"date": <YYYY-MM-DD>, "type": "CARD"|"CASH"|"INTERNET", "value": <double, max. 2 precision digits>, "description": <string>}
+GET /purchase/id        response: {"purchase": {"id": <long>, "date": <YYYY-MM-DD>, "type": CARD|CASH|INTERNET, "value": <double>, "description": <string>}}
+PUT /newPurchase        request body: {"purchase": {"id": <long>, "date": <YYYY-MM-DD>, "type": CARD|CASH|INTERNET, "value": <double>, "description": <string>}}
+                        response: {"id": <long>}
+PUT /purchase           request body: {"purchase": {"id": <long>, "date": <YYYY-MM-DD>, "type": CARD|CASH|INTERNET, "value": <double>, "description": <string>}}
                         response: {true|false}
 DELETE /purchase/id     response: {true|false}
-GET /purchases          response:  {"purchases": [{"id": <integer>, "date": <YYYY-MM-DD>, "type": CARD|CASH|INTERNET, "value": <double, max. 2 precision digits>, "description": <string>}, ...]}
-DELETE /purchases       request body: {"ids": ["id1", "id2", ...]}
+GET /purchases          response:  {"purchases": [{"id": <long>, "date": <YYYY-MM-DD>, "type": CARD|CASH|INTERNET, "value": <double>, "description": <string>}, ...]}
+DELETE /purchases       request body: {"ids": ["id1": <long>, "id2": <long>, ...]}
+                        response: {"deletedIds": ["id1": <long>, "id2": <long>, ...]}
 GET /stat/annual        response: {"annualStats": [{"year": <integer>, "total": <double>, "count": <integer>, "average": <double>}, ...]}
 GET /stat/months        response: {"monthlyStats": [{"year": <integer>, "month": <integer>, "total": <double>, "count": <integer>, "average": <double>}, ...]}

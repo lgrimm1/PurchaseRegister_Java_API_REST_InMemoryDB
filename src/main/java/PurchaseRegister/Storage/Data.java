@@ -1,6 +1,6 @@
 package PurchaseRegister.Storage;
 
-import PurchaseRegister.DataModels.*;
+import PurchaseRegister.Spring.*;
 
 /**
  * This class provides data storage.
@@ -8,15 +8,6 @@ import PurchaseRegister.DataModels.*;
  */
 public class Data {
 
-	public static final PurchaseList purchaseList = new PurchaseList();
+//	public static final PurchaseStorage purchaseList = new PurchaseStorage();
 
-	public static boolean load() {
-		//TODO reload
-		return true;
-	}
-
-	public static boolean save() {
-		//TODO save
-		return true;
-	}
 }

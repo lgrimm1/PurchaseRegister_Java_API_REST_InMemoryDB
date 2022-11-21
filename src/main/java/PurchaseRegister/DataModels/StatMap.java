@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.stream.*;
 
 /**
- * This class represents a statistics map which stores Stat data for annual or monthly periods.
+ * This class serves as statistical data collector, upgraded at every request on statistics.
  * @see #StatMap(StatType)
  * @see #getStatType()
  * @see #put(Purchase)
