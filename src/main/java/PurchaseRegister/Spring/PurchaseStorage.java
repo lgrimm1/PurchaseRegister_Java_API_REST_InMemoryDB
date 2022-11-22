@@ -11,6 +11,7 @@ import java.util.stream.*;
  * Storage class of PurchaseService class.
  * @see #PurchaseStorage()
  * @see #nextID()
+ * @see #indexOf(long)
  * @see #get(long)
  * @see #add(LocalDate, Purchase.PurchaseType, double, String)
  * @see #modify(long, LocalDate, Purchase.PurchaseType, double, String)

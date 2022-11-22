@@ -2,6 +2,7 @@ package PurchaseRegister.DataModels;
 
 import java.io.*;
 import java.time.*;
+import java.time.format.*;
 
 /**
  * This class represents a purchase.
@@ -10,15 +11,20 @@ import java.time.*;
  * @see #getPurchaseType()
  * @see #getPurchaseValue()
  * @see #getPurchaseDescription()
+ * @see #writeObject(ObjectOutputStream)
+ * @see #readObject(ObjectInputStream)
  * @author Laszlo Grimm
  */
 public class Purchase implements Serializable {
+	@Serial
+	private static final long serialVersionUID = 1L;
+	transient private final DateTimeFormatter dtf = DateTimeFormatter.ISO_LOCAL_DATE;
 
 	public enum PurchaseType {
 			CARD, CASH, INTERNET
 	}
 	private final long purchaseId;
-	private final LocalDate purchaseDate;
+	transient private LocalDate purchaseDate;
 	private final PurchaseType purchaseType;
 	private final double purchaseValue;
 	private final String purchaseDescription;
@@ -49,5 +55,19 @@ public class Purchase implements Serializable {
 
 	public String getPurchaseDescription() {
 		return purchaseDescription;
+	}
+
+	@Serial
+	private void writeObject(ObjectOutputStream oos) throws IOException {
+		oos.defaultWriteObject();
+		String dateText = purchaseDate.format(dtf);
+		oos.writeObject(dateText);
+	}
+
+	@Serial
+	private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+		ois.defaultReadObject();
+		String dateText = (String) ois.readObject();
+		purchaseDate = LocalDate.parse(dateText, dtf);
 	}
 }

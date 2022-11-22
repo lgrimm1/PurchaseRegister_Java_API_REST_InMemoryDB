@@ -16,6 +16,7 @@ import java.util.*;
  * @see #deletePurchase(long)
  * @see #getPurchases()
  * @see #deletePurchases(List)
+ * @see #countPurchases()
  * @see #statAnnual()
  * @see #statMonthly()
  * @author Laszlo Grimm
@@ -63,6 +64,12 @@ public class PurchaseController {
 	@ResponseBody
 	public List<Long> deletePurchases(@RequestBody List<Long> idList) {
 		return service.deletePurchases(idList);
+	}
+
+	@GetMapping(value = "/count", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public int countPurchases() {
+		return service.countPurchases();
 	}
 
 	@GetMapping(value = "/stat/annual", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

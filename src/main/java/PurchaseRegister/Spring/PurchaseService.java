@@ -14,6 +14,7 @@ import java.util.*;
  * @see #deletePurchase(long)
  * @see #getPurchases()
  * @see #deletePurchases(List)
+ * @see #countPurchases()
  * @see #generateAnnualStat()
  * @see #generateMonthlyStat()
 // * @see #parseDate(String)
@@ -24,7 +25,6 @@ import java.util.*;
 public class PurchaseService {
 
 	private final PurchaseStorage storage;
-//	private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
 
 	public PurchaseService(PurchaseStorage storage) {
 		this.storage = storage;
@@ -76,6 +76,10 @@ public class PurchaseService {
 		return deletedIds;
 	}
 
+	public int countPurchases() {
+		return storage.count();
+	}
+
 	public List<StatAnnualTransfer> generateAnnualStat() {
 		StatMap statMap = new StatMap(StatMap.StatType.ANNUAL);
 		storage.stream()
@@ -93,35 +97,4 @@ public class PurchaseService {
 				.map(entry -> new StatMonthlyTransfer(entry.getKey().getYear(), entry.getKey().getMonthValue(), entry.getValue().getTotal(), entry.getValue().getCount(), entry.getValue().getAverage()))
 				.toList();
 	}
-
-	/**
-	 * In case the argument can not be parsed, returns null.
-	 */
-/*
-	private LocalDate parseDate(String dateText) {
-		try {
-			return LocalDate.parse(dateText, dateTimeFormatter);
-		}
-		catch (Exception e) {
-			return null;
-		}
-	}
-*/
-
-	/**
-	 * In case the argument can not be parsed, returns null.
-	 */
-/*
-	private Purchase.PurchaseType parseType(String typeText) {
-		if (typeText == null) {
-			return null;
-		}
-		return switch (typeText) {
-			case "CARD" -> Purchase.PurchaseType.CARD;
-			case "CASH" -> Purchase.PurchaseType.CASH;
-			case "INTERNET" -> Purchase.PurchaseType.INTERNET;
-			default -> null;
-		};
-	}
-*/
 }

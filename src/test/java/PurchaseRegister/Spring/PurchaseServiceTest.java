@@ -277,6 +277,13 @@ class PurchaseServiceTest {
 	}
 
 	@Test
+	void countPurchases() {
+		Assertions.assertEquals(service.countPurchases(), storage.count());
+		service.deletePurchase(ids[1]);
+		Assertions.assertEquals(service.countPurchases(), storage.count());
+	}
+
+	@Test
 	void statAnnual() {
 		List<StatAnnualTransfer> list = service.generateAnnualStat();
 		Assertions.assertEquals(3, list.size());
