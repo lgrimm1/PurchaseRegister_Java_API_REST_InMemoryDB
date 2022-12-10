@@ -9,73 +9,55 @@ import java.util.*;
 class PurchaseStorageTest {
 
 	@Test
-	void empty() {
+	void createNewStorage() {
 		PurchaseStorage pl = new PurchaseStorage();
 		Assertions.assertEquals(0, pl.count());
 	}
 
 	@Test
+	void getMinMaxIds() {
+		PurchaseStorage pl = new PurchaseStorage();
+		Assertions.assertEquals(Long.MIN_VALUE, pl.getMinimumId());
+		Assertions.assertEquals(Long.MAX_VALUE, pl.getMaximumId());
+	}
+
+	@Test
 	void addPurchaseNullArguments() {
 		PurchaseStorage pl = new PurchaseStorage();
-		long id = pl.add(null, null, 65.4d, null);
-		Assertions.assertEquals(Long.MIN_VALUE, id);
-		Assertions.assertEquals(1, pl.count());
-		Purchase p = pl.get(id);
-		Assertions.assertEquals(id, p.getPurchaseId());
-		Assertions.assertNull(p.getPurchaseDate());
-		Assertions.assertNull(p.getPurchaseType());
-		Assertions.assertEquals(65.4d, p.getPurchaseValue());
-		Assertions.assertNull(p.getPurchaseDescription());
+		Long id = pl.add(null, null, 65.4d, null);
+		Assertions.assertNull(id);
+		Assertions.assertEquals(0, pl.count());
 	}
 
 	@Test
 	void addPurchaseNullDate() {
 		PurchaseStorage pl = new PurchaseStorage();
-		long id = pl.add(null, Purchase.PurchaseType.INTERNET, 65.4d, "abc");
-		Assertions.assertEquals(Long.MIN_VALUE, id);
-		Assertions.assertEquals(1, pl.count());
-		Purchase p = pl.get(id);
-		Assertions.assertEquals(id, p.getPurchaseId());
-		Assertions.assertNull(p.getPurchaseDate());
-		Assertions.assertEquals(Purchase.PurchaseType.INTERNET, p.getPurchaseType());
-		Assertions.assertEquals(65.4d, p.getPurchaseValue());
-		Assertions.assertEquals("abc", p.getPurchaseDescription());
+		Long id = pl.add(null, Purchase.PurchaseType.INTERNET, 65.4d, "abc");
+		Assertions.assertNull(id);
 	}
 
 	@Test
 	void addPurchaseNullType() {
 		PurchaseStorage pl = new PurchaseStorage();
-		long id = pl.add(LocalDate.now(), null, 65.4d, "abc");
-		Assertions.assertEquals(Long.MIN_VALUE, id);
-		Assertions.assertEquals(1, pl.count());
-		Purchase p = pl.get(id);
-		Assertions.assertEquals(id, p.getPurchaseId());
-		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
-		Assertions.assertNull(p.getPurchaseType());
-		Assertions.assertEquals(65.4d, p.getPurchaseValue());
-		Assertions.assertEquals("abc", p.getPurchaseDescription());
+		Long id = pl.add(LocalDate.now(), null, 65.4d, "abc");
+		Assertions.assertNull(id);
 	}
 
 	@Test
 	void addPurchaseNullDescription() {
 		PurchaseStorage pl = new PurchaseStorage();
-		long id = pl.add(LocalDate.now(), Purchase.PurchaseType.INTERNET, 65.4d, null);
-		Assertions.assertEquals(Long.MIN_VALUE, id);
-		Assertions.assertEquals(1, pl.count());
-		Purchase p = pl.get(id);
-		Assertions.assertEquals(id, p.getPurchaseId());
-		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
-		Assertions.assertEquals(Purchase.PurchaseType.INTERNET, p.getPurchaseType());
-		Assertions.assertEquals(65.4d, p.getPurchaseValue());
-		Assertions.assertNull(p.getPurchaseDescription());
+		Long id = pl.add(LocalDate.now(), Purchase.PurchaseType.INTERNET, 65.4d, null);
+		Assertions.assertNull(id);
 	}
 
 	@Test
 	void addCardPurchase() {
 		PurchaseStorage pl = new PurchaseStorage();
-		long id = pl.add(LocalDate.now(), Purchase.PurchaseType.CARD, 65.4d, "something");
-		Assertions.assertEquals(Long.MIN_VALUE, id);
+		Long id = pl.add(LocalDate.now(), Purchase.PurchaseType.CARD, 65.4d, "something");
+		Assertions.assertNotNull(id);
+		Assertions.assertEquals(pl.getMinimumId(), id);
 		Assertions.assertEquals(1, pl.count());
+
 		Purchase p = pl.get(id);
 		Assertions.assertEquals(id, p.getPurchaseId());
 		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
@@ -87,9 +69,11 @@ class PurchaseStorageTest {
 	@Test
 	void addCashPurchase() {
 		PurchaseStorage pl = new PurchaseStorage();
-		long id = pl.add(LocalDate.now(), Purchase.PurchaseType.CASH, 65.4d, "something");
-		Assertions.assertEquals(Long.MIN_VALUE, id);
+		Long id = pl.add(LocalDate.now(), Purchase.PurchaseType.CASH, 65.4d, "something");
+		Assertions.assertNotNull(id);
+		Assertions.assertEquals(pl.getMinimumId(), id);
 		Assertions.assertEquals(1, pl.count());
+
 		Purchase p = pl.get(id);
 		Assertions.assertEquals(id, p.getPurchaseId());
 		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
@@ -101,9 +85,11 @@ class PurchaseStorageTest {
 	@Test
 	void addInternetPurchase() {
 		PurchaseStorage pl = new PurchaseStorage();
-		long id = pl.add(LocalDate.now(), Purchase.PurchaseType.INTERNET, 65.4d, "something");
-		Assertions.assertEquals(Long.MIN_VALUE, id);
+		Long id = pl.add(LocalDate.now(), Purchase.PurchaseType.INTERNET, 65.4d, "something");
+		Assertions.assertNotNull(id);
+		Assertions.assertEquals(pl.getMinimumId(), id);
 		Assertions.assertEquals(1, pl.count());
+
 		Purchase p = pl.get(id);
 		Assertions.assertEquals(id, p.getPurchaseId());
 		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
@@ -115,10 +101,12 @@ class PurchaseStorageTest {
 	@Test
 	void addMoreElements() {
 		PurchaseStorage pl = new PurchaseStorage();
-		long id1 = pl.add(LocalDate.of(2010, 3, 5), Purchase.PurchaseType.CARD, 10d, "abc");
-		long id2 = pl.add(LocalDate.of(2011, 4, 6), Purchase.PurchaseType.CASH, 20d, "xyz");
-		Assertions.assertEquals(Long.MIN_VALUE, id1);
-		Assertions.assertEquals(Long.MIN_VALUE + 1, id2);
+		Long id1 = pl.add(LocalDate.of(2010, 3, 5), Purchase.PurchaseType.CARD, 10d, "abc");
+		Long id2 = pl.add(LocalDate.of(2011, 4, 6), Purchase.PurchaseType.CASH, 20d, "xyz");
+		Assertions.assertNotNull(id1);
+		Assertions.assertEquals(pl.getMinimumId(), id1);
+		Assertions.assertNotNull(id2);
+		Assertions.assertEquals(pl.getMinimumId() + 1, id2);
 		Assertions.assertEquals(2, pl.count());
 
 		Purchase p = pl.get(id1);
@@ -137,13 +125,43 @@ class PurchaseStorageTest {
 	}
 
 	@Test
+	void getPurchaseEmptyStorage() {
+		PurchaseStorage pl = new PurchaseStorage();
+
+		Assertions.assertNull(pl.get(pl.getMinimumId()));
+	}
+
+	@Test
+	void getPurchaseWrongId() {
+		PurchaseStorage pl = new PurchaseStorage();
+		pl.add(LocalDate.of(2010, 3, 5), Purchase.PurchaseType.CARD, 10d, "abc");
+		pl.add(LocalDate.of(2011, 4, 6), Purchase.PurchaseType.CASH, 20d, "xyz");
+
+		Assertions.assertNull(pl.get(3));
+	}
+
+	@Test
+	void getPurchaseRightId() {
+		PurchaseStorage pl = new PurchaseStorage();
+		long id1 = pl.add(LocalDate.of(2010, 3, 5), Purchase.PurchaseType.CARD, 10d, "abc");
+		long id2 = pl.add(LocalDate.of(2011, 4, 6), Purchase.PurchaseType.CASH, 20d, "xyz");
+
+		Purchase p = pl.get(id2);
+		Assertions.assertNotNull(p);
+		Assertions.assertEquals(id2, p.getPurchaseId());
+		Assertions.assertEquals(LocalDate.of(2011, 4, 6), p.getPurchaseDate());
+		Assertions.assertEquals(Purchase.PurchaseType.CASH, p.getPurchaseType());
+		Assertions.assertEquals(20d, p.getPurchaseValue());
+		Assertions.assertEquals("xyz", p.getPurchaseDescription());
+	}
+
+	@Test
 	void modifyPurchaseWrongId() {
 		PurchaseStorage pl = new PurchaseStorage();
 		long id1 = pl.add(LocalDate.of(2010, 3, 5), Purchase.PurchaseType.CARD, 10d, "abc");
 		long id2 = pl.add(LocalDate.of(2011, 4, 6), Purchase.PurchaseType.CASH, 20d, "xyz");
 
 		Assertions.assertFalse(pl.modify(3, null, Purchase.PurchaseType.CARD, 65.4d, null));
-
 		Assertions.assertEquals(2, pl.count());
 
 		Purchase p = pl.get(id1);
@@ -167,8 +185,7 @@ class PurchaseStorageTest {
 		long id1 = pl.add(LocalDate.of(2010, 3, 5), Purchase.PurchaseType.CARD, 10d, "abc");
 		long id2 = pl.add(LocalDate.of(2011, 4, 6), Purchase.PurchaseType.CASH, 20d, "xyz");
 
-		Assertions.assertTrue(pl.modify(id2, null, null, 65.4d, null));
-
+		Assertions.assertFalse(pl.modify(id2, null, null, 65.4d, null));
 		Assertions.assertEquals(2, pl.count());
 
 		Purchase p = pl.get(id1);
@@ -180,10 +197,10 @@ class PurchaseStorageTest {
 
 		p = pl.get(id2);
 		Assertions.assertEquals(id2, p.getPurchaseId());
-		Assertions.assertNull(p.getPurchaseDate());
-		Assertions.assertNull(p.getPurchaseType());
-		Assertions.assertEquals(65.4d, p.getPurchaseValue());
-		Assertions.assertNull(p.getPurchaseDescription());
+		Assertions.assertEquals(LocalDate.of(2011, 4, 6), p.getPurchaseDate());
+		Assertions.assertEquals(Purchase.PurchaseType.CASH, p.getPurchaseType());
+		Assertions.assertEquals(20d, p.getPurchaseValue());
+		Assertions.assertEquals("xyz", p.getPurchaseDescription());
 	}
 
 	@Test
@@ -192,8 +209,7 @@ class PurchaseStorageTest {
 		long id1 = pl.add(LocalDate.of(2010, 3, 5), Purchase.PurchaseType.CARD, 10d, "abc");
 		long id2 = pl.add(LocalDate.of(2011, 4, 6), Purchase.PurchaseType.CASH, 20d, "xyz");
 
-		Assertions.assertTrue(pl.modify(id2, null, Purchase.PurchaseType.INTERNET, 65.4d, "ooo"));
-
+		Assertions.assertFalse(pl.modify(id2, null, Purchase.PurchaseType.CARD, 65.4d, "ooo"));
 		Assertions.assertEquals(2, pl.count());
 
 		Purchase p = pl.get(id1);
@@ -205,10 +221,10 @@ class PurchaseStorageTest {
 
 		p = pl.get(id2);
 		Assertions.assertEquals(id2, p.getPurchaseId());
-		Assertions.assertNull(p.getPurchaseDate());
-		Assertions.assertEquals(Purchase.PurchaseType.INTERNET, p.getPurchaseType());
-		Assertions.assertEquals(65.4d, p.getPurchaseValue());
-		Assertions.assertEquals("ooo", p.getPurchaseDescription());
+		Assertions.assertEquals(LocalDate.of(2011, 4, 6), p.getPurchaseDate());
+		Assertions.assertEquals(Purchase.PurchaseType.CASH, p.getPurchaseType());
+		Assertions.assertEquals(20d, p.getPurchaseValue());
+		Assertions.assertEquals("xyz", p.getPurchaseDescription());
 	}
 
 	@Test
@@ -217,8 +233,7 @@ class PurchaseStorageTest {
 		long id1 = pl.add(LocalDate.of(2010, 3, 5), Purchase.PurchaseType.CARD, 10d, "abc");
 		long id2 = pl.add(LocalDate.of(2011, 4, 6), Purchase.PurchaseType.CASH, 20d, "xyz");
 
-		Assertions.assertTrue(pl.modify(id2, LocalDate.now(), null, 65.4d, "ooo"));
-
+		Assertions.assertFalse(pl.modify(id2, LocalDate.now(), null, 65.4d, "ooo"));
 		Assertions.assertEquals(2, pl.count());
 
 		Purchase p = pl.get(id1);
@@ -230,10 +245,10 @@ class PurchaseStorageTest {
 
 		p = pl.get(id2);
 		Assertions.assertEquals(id2, p.getPurchaseId());
-		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
-		Assertions.assertNull(p.getPurchaseType());
-		Assertions.assertEquals(65.4d, p.getPurchaseValue());
-		Assertions.assertEquals("ooo", p.getPurchaseDescription());
+		Assertions.assertEquals(LocalDate.of(2011, 4, 6), p.getPurchaseDate());
+		Assertions.assertEquals(Purchase.PurchaseType.CASH, p.getPurchaseType());
+		Assertions.assertEquals(20d, p.getPurchaseValue());
+		Assertions.assertEquals("xyz", p.getPurchaseDescription());
 	}
 
 	@Test
@@ -242,8 +257,7 @@ class PurchaseStorageTest {
 		long id1 = pl.add(LocalDate.of(2010, 3, 5), Purchase.PurchaseType.CARD, 10d, "abc");
 		long id2 = pl.add(LocalDate.of(2011, 4, 6), Purchase.PurchaseType.CASH, 20d, "xyz");
 
-		Assertions.assertTrue(pl.modify(id2, LocalDate.now(), Purchase.PurchaseType.INTERNET, 65.4d, null));
-
+		Assertions.assertFalse(pl.modify(id2, LocalDate.now(), Purchase.PurchaseType.CARD, 65.4d, null));
 		Assertions.assertEquals(2, pl.count());
 
 		Purchase p = pl.get(id1);
@@ -255,20 +269,19 @@ class PurchaseStorageTest {
 
 		p = pl.get(id2);
 		Assertions.assertEquals(id2, p.getPurchaseId());
-		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
-		Assertions.assertEquals(Purchase.PurchaseType.INTERNET, p.getPurchaseType());
-		Assertions.assertEquals(65.4d, p.getPurchaseValue());
-		Assertions.assertNull(p.getPurchaseDescription());
+		Assertions.assertEquals(LocalDate.of(2011, 4, 6), p.getPurchaseDate());
+		Assertions.assertEquals(Purchase.PurchaseType.CASH, p.getPurchaseType());
+		Assertions.assertEquals(20d, p.getPurchaseValue());
+		Assertions.assertEquals("xyz", p.getPurchaseDescription());
 	}
 
 	@Test
-	void modifyPurchaseExistingArguments() {
+	void modifyPurchaseRightArguments() {
 		PurchaseStorage pl = new PurchaseStorage();
 		long id1 = pl.add(LocalDate.of(2010, 3, 5), Purchase.PurchaseType.CARD, 10d, "abc");
 		long id2 = pl.add(LocalDate.of(2011, 4, 6), Purchase.PurchaseType.CASH, 20d, "xyz");
 
 		Assertions.assertTrue(pl.modify(id2, LocalDate.of(2012, 8, 4), Purchase.PurchaseType.INTERNET, 30d, "ooo"));
-
 		Assertions.assertEquals(2, pl.count());
 
 		Purchase p = pl.get(id1);
@@ -293,7 +306,6 @@ class PurchaseStorageTest {
 		long id2 = pl.add(LocalDate.of(2011, 4, 6), Purchase.PurchaseType.CASH, 20d, "xyz");
 
 		Assertions.assertFalse(pl.delete(3));
-
 		Assertions.assertEquals(2, pl.count());
 
 		Purchase p = pl.get(id1);
@@ -319,7 +331,6 @@ class PurchaseStorageTest {
 		long id3 = pl.add(LocalDate.of(2012, 8, 4), Purchase.PurchaseType.INTERNET, 30d, "ooo");
 
 		Assertions.assertTrue(pl.delete(id2));
-
 		Assertions.assertEquals(2, pl.count());
 
 		Purchase p = pl.get(id1);
@@ -343,6 +354,7 @@ class PurchaseStorageTest {
 		pl.add(LocalDate.of(2010, 3, 5), Purchase.PurchaseType.CARD, 10d, "abc");
 		pl.add(LocalDate.of(2011, 4, 6), Purchase.PurchaseType.CASH, 20d, "xyz");
 		pl.add(LocalDate.of(2012, 8, 4), Purchase.PurchaseType.INTERNET, 30d, "ooo");
+
 		pl.clear();
 		Assertions.assertEquals(0, pl.count());
 	}
@@ -353,6 +365,7 @@ class PurchaseStorageTest {
 		long id1 = pl.add(LocalDate.of(2010, 3, 5), Purchase.PurchaseType.CARD, 10d, "abc");
 		long id2 = pl.add(LocalDate.of(2011, 4, 6), Purchase.PurchaseType.CASH, 20d, "xyz");
 		long id3 = pl.add(LocalDate.of(2012, 8, 4), Purchase.PurchaseType.INTERNET, 30d, "ooo");
+
 		List<Purchase> plist = pl.stream().toList();
 		Assertions.assertEquals(3, plist.size());
 		Assertions.assertEquals(pl.get(id1), plist.get(0));

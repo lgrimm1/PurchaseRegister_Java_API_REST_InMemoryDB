@@ -19,21 +19,29 @@ import java.util.stream.*;
  * @see #count()
  * @see #clear()
  * @see #stream()
+ * @see #getMinimumId()
+ * @see #getMaximumId()
  * @author Laszlo Grimm
  */
 @Repository
 public class PurchaseStorage {
 
 	private final List<Purchase> purchaseList;
-	private Long maxId;
+	private Long actualGreatestId;
 
 	public PurchaseStorage() {
 		purchaseList = new ArrayList<>();
-		maxId = null;
+		actualGreatestId = null;
 	}
 
-	private long nextID() {
-		return maxId == null ? Long.MIN_VALUE : maxId + 1;
+	private Long nextID() {
+		if (actualGreatestId == null) {
+			return Long.MIN_VALUE;
+		}
+		if (actualGreatestId == Long.MAX_VALUE) {
+			return null;
+		}
+		return actualGreatestId + 1;
 	}
 
 	private int indexOf(long id) {
@@ -52,15 +60,26 @@ public class PurchaseStorage {
 	}
 
 	/**
-	 * Returns the ID of the added Purchase.
+	 * Returns the ID of the added Purchase.<p>
+	 * In case Purchase arguments are not proper, returns null.
 	 */
-	public long add(LocalDate dateOfPurchase, Purchase.PurchaseType typeOfPurchase, double valueOfPurchase, String descriptionOfPurchase) {
-		maxId = nextID();
-		purchaseList.add(new Purchase(maxId, dateOfPurchase, typeOfPurchase, valueOfPurchase, descriptionOfPurchase));
-		return maxId;
+	public Long add(LocalDate dateOfPurchase, Purchase.PurchaseType typeOfPurchase, double valueOfPurchase, String descriptionOfPurchase) {
+		if (dateOfPurchase == null || typeOfPurchase == null || descriptionOfPurchase == null) {
+			return null;
+		}
+		Long nextIdCandidate = nextID();
+		if (nextIdCandidate == null) {
+			return null;
+		}
+		actualGreatestId = nextIdCandidate;
+		purchaseList.add(new Purchase(actualGreatestId, dateOfPurchase, typeOfPurchase, valueOfPurchase, descriptionOfPurchase));
+		return actualGreatestId;
 	}
 
 	public boolean modify(long id, LocalDate dateOfPurchase, Purchase.PurchaseType typeOfPurchase, double valueOfPurchase, String descriptionOfPurchase) {
+		if (dateOfPurchase == null || typeOfPurchase == null || descriptionOfPurchase == null) {
+			return false;
+		}
 		int itemIndex = indexOf(id);
 		if (itemIndex == -1) {
 			return false;
@@ -88,5 +107,13 @@ public class PurchaseStorage {
 
 	public Stream<Purchase> stream() {
 		return purchaseList.stream();
+	}
+
+	public long getMinimumId() {
+		return Long.MIN_VALUE;
+	}
+
+	public long getMaximumId() {
+		return Long.MAX_VALUE;
 	}
 }

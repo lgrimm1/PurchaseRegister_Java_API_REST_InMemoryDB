@@ -17,7 +17,7 @@ import java.util.stream.*;
 public class StatMap {
 
 	public enum StatType {
-		ANNUAL, MONTHLY
+		FULL, ANNUAL, MONTHLY
 	}
 
 	private final HashMap<LocalDate, Stat> statMap;
@@ -42,6 +42,7 @@ public class StatMap {
 			return false;
 		}
 		LocalDate usedDate = switch (statType) {
+			case FULL -> usedDate = LocalDate.of(2000, 1, 1);
 			case ANNUAL -> usedDate = LocalDate.of(newPurchase.getPurchaseDate().getYear(), 1, 1);
 			case MONTHLY -> usedDate = LocalDate.of(newPurchase.getPurchaseDate().getYear(), newPurchase.getPurchaseDate().getMonthValue(), 1);
 		};
@@ -64,6 +65,7 @@ public class StatMap {
 			return null;
 		}
 		LocalDate usedDate = switch (statType) {
+			case FULL -> usedDate = LocalDate.of(2000, 1, 1);
 			case ANNUAL -> usedDate = LocalDate.of(localDate.getYear(), 1, 1);
 			case MONTHLY -> usedDate = LocalDate.of(localDate.getYear(), localDate.getMonthValue(), 1);
 		};

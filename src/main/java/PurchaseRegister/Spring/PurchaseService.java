@@ -1,6 +1,7 @@
 package PurchaseRegister.Spring;
 
 import PurchaseRegister.DataModels.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -17,47 +18,46 @@ import java.util.*;
  * @see #countPurchases()
  * @see #generateAnnualStat()
  * @see #generateMonthlyStat()
-// * @see #parseDate(String)
-// * @see #parseType(String)
  * @author Laszlo Grimm
  */
 @Service
 public class PurchaseService {
 
-	private final PurchaseStorage storage;
+	private final PurchaseStorage purchaseStorage;
 
-	public PurchaseService(PurchaseStorage storage) {
-		this.storage = storage;
+	@Autowired
+	public PurchaseService(PurchaseStorage purchaseStorage) {
+		this.purchaseStorage = purchaseStorage;
 	}
 
 	public Purchase getPurchaseById(long id) {
-		return storage.get(id);
+		return purchaseStorage.get(id);
 	}
 
 	/**
-	 * Ignores id field value.<p>
-	 * In case of failure, returns null.
+	 * The registered new Purchase will get a legal ID in storage therefore the method ignores id field value of argument.
+	 *
 	 */
 	public Long addNewPurchase(Purchase newPurchase) {
-		if (newPurchase == null || newPurchase.getPurchaseDate() == null || newPurchase.getPurchaseType() == null || newPurchase.getPurchaseDescription() == null) {
+		if (newPurchase == null) {
 			return null;
 		}
-		return storage.add(newPurchase.getPurchaseDate(), newPurchase.getPurchaseType(), newPurchase.getPurchaseValue(), newPurchase.getPurchaseDescription());
+		return purchaseStorage.add(newPurchase.getPurchaseDate(), newPurchase.getPurchaseType(), newPurchase.getPurchaseValue(), newPurchase.getPurchaseDescription());
 	}
 
 	public boolean modifyPurchase(Purchase newPurchase) {
-		if (newPurchase == null || newPurchase.getPurchaseDate() == null || newPurchase.getPurchaseType() == null || newPurchase.getPurchaseDescription() == null) {
+		if (newPurchase == null) {
 			return false;
 		}
-		return storage.modify(newPurchase.getPurchaseId(), newPurchase.getPurchaseDate(), newPurchase.getPurchaseType(), newPurchase.getPurchaseValue(), newPurchase.getPurchaseDescription());
+		return purchaseStorage.modify(newPurchase.getPurchaseId(), newPurchase.getPurchaseDate(), newPurchase.getPurchaseType(), newPurchase.getPurchaseValue(), newPurchase.getPurchaseDescription());
 	}
 
 	public Boolean deletePurchase(long id) {
-		return storage.delete(id);
+		return purchaseStorage.delete(id);
 	}
 
 	public List<Purchase> getPurchases() {
-		return storage.stream().toList();
+		return purchaseStorage.stream().toList();
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class PurchaseService {
 		}
 		List<Long> deletedIds = new ArrayList<>();
 		for (Long id : idList) {
-			if (storage.delete(id)) {
+			if (purchaseStorage.delete(id)) {
 				deletedIds.add(id);
 			}
 		}
@@ -77,24 +77,45 @@ public class PurchaseService {
 	}
 
 	public int countPurchases() {
-		return storage.count();
+		return purchaseStorage.count();
 	}
 
 	public List<StatAnnualTransfer> generateAnnualStat() {
 		StatMap statMap = new StatMap(StatMap.StatType.ANNUAL);
-		storage.stream()
+		purchaseStorage.stream()
 				.forEach(statMap::put);
 		return statMap.stream()
-				.map(entry -> new StatAnnualTransfer(entry.getKey().getYear(), entry.getValue().getTotal(), entry.getValue().getCount(), entry.getValue().getAverage()))
+				.map(entry -> new StatAnnualTransfer(
+						entry.getKey().getYear(),
+						entry.getValue().getTotal(),
+						entry.getValue().getCount(),
+						entry.getValue().getAverage()))
 				.toList();
 	}
 
 	public List<StatMonthlyTransfer> generateMonthlyStat() {
 		StatMap statMap = new StatMap(StatMap.StatType.MONTHLY);
-		storage.stream()
+		purchaseStorage.stream()
 				.forEach(statMap::put);
 		return statMap.stream()
-				.map(entry -> new StatMonthlyTransfer(entry.getKey().getYear(), entry.getKey().getMonthValue(), entry.getValue().getTotal(), entry.getValue().getCount(), entry.getValue().getAverage()))
+				.map(entry -> new StatMonthlyTransfer(
+						entry.getKey().getYear(),
+						entry.getKey().getMonthValue(),
+						entry.getValue().getTotal(),
+						entry.getValue().getCount(),
+						entry.getValue().getAverage()))
 				.toList();
+	}
+
+	public StatFulltotalTransfer generateFulltotalStat() {
+		StatMap statMap = new StatMap(StatMap.StatType.FULL);
+		purchaseStorage.stream()
+				.forEach(statMap::put);
+		return statMap.stream()
+				.map(entry -> new StatFulltotalTransfer(
+						entry.getValue().getTotal(),
+						entry.getValue().getCount(),
+						entry.getValue().getAverage()))
+				.toList().get(0);
 	}
 }

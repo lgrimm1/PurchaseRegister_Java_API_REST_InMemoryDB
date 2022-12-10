@@ -1,6 +1,7 @@
 package PurchaseRegister.Spring;
 
 import PurchaseRegister.DataModels.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,7 @@ public class PurchaseController {
 
 	private final PurchaseService service;
 
+	@Autowired
 	public PurchaseController(PurchaseService service) {
 		this.service = service;
 	}
