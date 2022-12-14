@@ -4,29 +4,22 @@ import java.io.*;
 import java.math.*;
 
 /**
- * This class represent data element of annual statistical data transfer towards frontend.
- * @see #StatAnnualTransfer(Long, BigDecimal, Long, BigDecimal)
- * @see #getYear()
+ * This class represent data element of full statistical data transfer towards frontend.
+ * @see #StatFullTransfer(BigDecimal, Long, BigDecimal)
  * @see #getTotal()
  * @see #getCount()
  * @see #getAverage()
  * @author Laszlo Grimm
  */
-public class StatAnnualTransfer implements Serializable {
-	private final Long year;
+public class StatFullTransfer implements Serializable {
 	private final BigDecimal total;
 	private final Long count;
 	private final BigDecimal average;
 
-	public StatAnnualTransfer(Long year, BigDecimal total, Long count, BigDecimal average) {
-		this.year = year;
+	public StatFullTransfer(BigDecimal total, Long count, BigDecimal average) {
 		this.total = total;
 		this.count = count;
 		this.average = average;
-	}
-
-	public Long getYear() {
-		return year;
 	}
 
 	public BigDecimal getTotal() {

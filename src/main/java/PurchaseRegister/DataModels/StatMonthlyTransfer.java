@@ -1,10 +1,11 @@
 package PurchaseRegister.DataModels;
 
 import java.io.*;
+import java.math.*;
 
 /**
  * This class represent data element of monthly statistical data transfer towards frontend.
- * @see #StatMonthlyTransfer(int, int, double, int, double)
+ * @see #StatMonthlyTransfer(Long, Long, BigDecimal, Long, BigDecimal)
  * @see #getYear()
  * @see #getMonth()
  * @see #getTotal()
@@ -14,13 +15,13 @@ import java.io.*;
  */
 public class StatMonthlyTransfer implements Serializable {
 
-	private final Integer year;
-	private final Integer month;
-	private final Double total;
-	private final Integer count;
-	private final Double average;
+	private final Long year;
+	private final Long month;
+	private final BigDecimal total;
+	private final Long count;
+	private final BigDecimal average;
 
-	public StatMonthlyTransfer(int year, int month, double total, int count, double average) {
+	public StatMonthlyTransfer(Long year, Long month, BigDecimal total, Long count, BigDecimal average) {
 		this.year = year;
 		this.month = month;
 		this.total = total;
@@ -28,23 +29,23 @@ public class StatMonthlyTransfer implements Serializable {
 		this.average = average;
 	}
 
-	public Integer getYear() {
+	public Long getYear() {
 		return year;
 	}
 
-	public Integer getMonth() {
+	public Long getMonth() {
 		return month;
 	}
 
-	public Double getTotal() {
+	public BigDecimal getTotal() {
 		return total;
 	}
 
-	public Integer getCount() {
+	public Long getCount() {
 		return count;
 	}
 
-	public Double getAverage() {
+	public BigDecimal getAverage() {
 		return average;
 	}
 }

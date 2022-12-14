@@ -1,5 +1,6 @@
 package PurchaseRegister.DataModels;
 
+import java.math.*;
 import java.time.*;
 import java.util.*;
 import java.util.stream.*;
@@ -42,16 +43,16 @@ public class StatMap {
 			return false;
 		}
 		LocalDate usedDate = switch (statType) {
-			case FULL -> usedDate = LocalDate.of(2000, 1, 1);
-			case ANNUAL -> usedDate = LocalDate.of(newPurchase.getPurchaseDate().getYear(), 1, 1);
-			case MONTHLY -> usedDate = LocalDate.of(newPurchase.getPurchaseDate().getYear(), newPurchase.getPurchaseDate().getMonthValue(), 1);
+			case FULL -> LocalDate.of(2000, 1, 1);
+			case ANNUAL -> LocalDate.of(newPurchase.getPurchaseDate().getYear(), 1, 1);
+			case MONTHLY -> LocalDate.of(newPurchase.getPurchaseDate().getYear(), newPurchase.getPurchaseDate().getMonthValue(), 1);
 		};
 		if (statMap.containsKey(usedDate)) {
 			Stat stat = statMap.get(usedDate);
-			statMap.put(usedDate, new Stat(stat.getTotal() + newPurchase.getPurchaseValue(), stat.getCount() + 1));
+			statMap.put(usedDate, new Stat(BigDecimal.valueOf(stat.getTotal().doubleValue() + newPurchase.getPurchaseValue().doubleValue()), stat.getCount() + 1));
 		}
 		else {
-			statMap.put(usedDate, new Stat(newPurchase.getPurchaseValue(), 1));
+			statMap.put(usedDate, new Stat(newPurchase.getPurchaseValue(), 1L));
 		}
 		return true;
 	}
@@ -65,9 +66,9 @@ public class StatMap {
 			return null;
 		}
 		LocalDate usedDate = switch (statType) {
-			case FULL -> usedDate = LocalDate.of(2000, 1, 1);
-			case ANNUAL -> usedDate = LocalDate.of(localDate.getYear(), 1, 1);
-			case MONTHLY -> usedDate = LocalDate.of(localDate.getYear(), localDate.getMonthValue(), 1);
+			case FULL -> LocalDate.of(2000, 1, 1);
+			case ANNUAL -> LocalDate.of(localDate.getYear(), 1, 1);
+			case MONTHLY -> LocalDate.of(localDate.getYear(), localDate.getMonthValue(), 1);
 		};
 		if (statMap.containsKey(usedDate)) {
 			return statMap.get(usedDate).deepCopy();

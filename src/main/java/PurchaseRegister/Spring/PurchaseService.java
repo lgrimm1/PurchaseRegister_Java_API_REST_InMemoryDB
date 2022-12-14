@@ -9,15 +9,16 @@ import java.util.*;
 /**
  * Service class of PurchaseController class.
  * @see #PurchaseService(PurchaseStorage)
- * @see #getPurchaseById(long)
+ * @see #getPurchaseById(Long)
  * @see #addNewPurchase(Purchase)
  * @see #modifyPurchase(Purchase)
- * @see #deletePurchase(long)
+ * @see #deletePurchase(Long)
  * @see #getPurchases()
  * @see #deletePurchases(List)
  * @see #countPurchases()
  * @see #generateAnnualStat()
  * @see #generateMonthlyStat()
+ * @see #generateFullStat()
  * @author Laszlo Grimm
  */
 @Service
@@ -30,29 +31,41 @@ public class PurchaseService {
 		this.purchaseStorage = purchaseStorage;
 	}
 
-	public Purchase getPurchaseById(long id) {
+	public Purchase getPurchaseById(Long id) {
 		return purchaseStorage.get(id);
 	}
 
 	/**
-	 * The registered new Purchase will get a legal ID in storage therefore the method ignores id field value of argument.
-	 *
+	 * The registered new Purchase will get a legal ID in storage therefore the method ignores id field value of argument.<p>
+	 * In case of any invalid data in the passed object, returns Long.MIN_Value.
 	 */
-	public Long addNewPurchase(Purchase newPurchase) {
+	public long addNewPurchase(Purchase newPurchase) {
 		if (newPurchase == null) {
-			return null;
+			return Long.MIN_VALUE;
 		}
-		return purchaseStorage.add(newPurchase.getPurchaseDate(), newPurchase.getPurchaseType(), newPurchase.getPurchaseValue(), newPurchase.getPurchaseDescription());
+		return purchaseStorage.add(
+				newPurchase.getPurchaseDate(),
+				newPurchase.getPurchaseType(),
+				newPurchase.getPurchaseValue(),
+				newPurchase.getPurchaseDescription());
 	}
 
 	public boolean modifyPurchase(Purchase newPurchase) {
 		if (newPurchase == null) {
 			return false;
 		}
-		return purchaseStorage.modify(newPurchase.getPurchaseId(), newPurchase.getPurchaseDate(), newPurchase.getPurchaseType(), newPurchase.getPurchaseValue(), newPurchase.getPurchaseDescription());
+		return purchaseStorage.modify(
+				newPurchase.getPurchaseId(),
+				newPurchase.getPurchaseDate(),
+				newPurchase.getPurchaseType(),
+				newPurchase.getPurchaseValue(),
+				newPurchase.getPurchaseDescription());
 	}
 
-	public Boolean deletePurchase(long id) {
+	public Boolean deletePurchase(Long id) {
+		if (id == null) {
+			return false;
+		}
 		return purchaseStorage.delete(id);
 	}
 
@@ -86,7 +99,7 @@ public class PurchaseService {
 				.forEach(statMap::put);
 		return statMap.stream()
 				.map(entry -> new StatAnnualTransfer(
-						entry.getKey().getYear(),
+						(long) entry.getKey().getYear(),
 						entry.getValue().getTotal(),
 						entry.getValue().getCount(),
 						entry.getValue().getAverage()))
@@ -99,20 +112,20 @@ public class PurchaseService {
 				.forEach(statMap::put);
 		return statMap.stream()
 				.map(entry -> new StatMonthlyTransfer(
-						entry.getKey().getYear(),
-						entry.getKey().getMonthValue(),
+						(long) entry.getKey().getYear(),
+						(long) entry.getKey().getMonthValue(),
 						entry.getValue().getTotal(),
 						entry.getValue().getCount(),
 						entry.getValue().getAverage()))
 				.toList();
 	}
 
-	public StatFulltotalTransfer generateFulltotalStat() {
+	public StatFullTransfer generateFullStat() {
 		StatMap statMap = new StatMap(StatMap.StatType.FULL);
 		purchaseStorage.stream()
 				.forEach(statMap::put);
 		return statMap.stream()
-				.map(entry -> new StatFulltotalTransfer(
+				.map(entry -> new StatFullTransfer(
 						entry.getValue().getTotal(),
 						entry.getValue().getCount(),
 						entry.getValue().getAverage()))

@@ -20,9 +20,11 @@ import java.util.*;
  * @see #countPurchases()
  * @see #statAnnual()
  * @see #statMonthly()
+ * @see #statFull()
  * @author Laszlo Grimm
  */
-@Controller
+@RestController
+@RequestMapping(value = "/api/v1", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class PurchaseController {
 
 	private final PurchaseService service;
@@ -32,57 +34,85 @@ public class PurchaseController {
 		this.service = service;
 	}
 
-	@GetMapping(value = "/purchase/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping("/purchase/{id}")
 	@ResponseBody
 	public Purchase getPurchaseById(@PathVariable long id) {
 		return service.getPurchaseById(id);
 	}
 
-	@PutMapping(value = "/newPurchase", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping("/newPurchase")
 	@ResponseBody
 	public Long addNewPurchase(@RequestBody Purchase newPurchase) {
-		return service.addNewPurchase(newPurchase);
+		System.out.println("----- Entered into PurchaseController#addNewPurchase()");
+		if (newPurchase.getPurchaseDate() == null) {
+			System.out.println(
+					newPurchase.getPurchaseId() + " | " +
+					"null | " +
+					newPurchase.getPurchaseType() + " | " +
+					newPurchase.getPurchaseValue().doubleValue() + " | " +
+					newPurchase.getPurchaseDescription());
+		}
+		else {
+			System.out.println(
+					newPurchase.getPurchaseId() + " | " +
+					newPurchase.getPurchaseDate().getYear() + "-" +
+					newPurchase.getPurchaseDate().getMonthValue() + "-" +
+					newPurchase.getPurchaseDate().getDayOfMonth()+ " | " +
+					newPurchase.getPurchaseType() + " | " +
+					newPurchase.getPurchaseValue().doubleValue() + " | " +
+					newPurchase.getPurchaseDescription());
+		}
+		long result = service.addNewPurchase(newPurchase);
+		System.out.println("Result: " + result);
+//		return service.addNewPurchase(newPurchase);
+		return result;
 	}
 
-	@PutMapping(value = "/purchase", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping("/purchase")
 	@ResponseBody
 	public boolean modifyPurchase(@RequestBody Purchase newPurchase) {
 		return service.modifyPurchase(newPurchase);
 	}
 
-	@DeleteMapping(value = "/purchase/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping("/purchase/{id}")
 	@ResponseBody
 	public boolean deletePurchase(@PathVariable long id) {
 		return service.deletePurchase(id);
 	}
 
-	@GetMapping(value = "/purchases", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping("/purchases")
 	@ResponseBody
 	public List<Purchase> getPurchases() {
 		return service.getPurchases();
 	}
 
-	@DeleteMapping(value = "/purchases", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping("/purchases")
 	@ResponseBody
 	public List<Long> deletePurchases(@RequestBody List<Long> idList) {
 		return service.deletePurchases(idList);
 	}
 
-	@GetMapping(value = "/count", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping("/count")
 	@ResponseBody
 	public int countPurchases() {
 		return service.countPurchases();
 	}
 
-	@GetMapping(value = "/stat/annual", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping("/stat/annual")
 	@ResponseBody
 	public List<StatAnnualTransfer> statAnnual() {
 		return service.generateAnnualStat();
 	}
 
-	@GetMapping(value = "/stat/months", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping("/stat/months")
 	@ResponseBody
 	public List<StatMonthlyTransfer> statMonthly() {
 		return service.generateMonthlyStat();
+	}
+
+	@GetMapping("/stat/full")
+	@ResponseBody
+	public StatFullTransfer statFull() {
+		return service.generateFullStat();
 	}
 }

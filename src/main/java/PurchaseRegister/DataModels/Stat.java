@@ -1,10 +1,10 @@
 package PurchaseRegister.DataModels;
 
-import java.io.*;
+import java.math.*;
 
 /**
  * This class represents a statistics element.
- * @see #Stat(double, int)
+ * @see #Stat(BigDecimal, Long)
  * @see #getTotal()
  * @see #getCount()
  * @see #getAverage()
@@ -13,24 +13,24 @@ import java.io.*;
  */
 public class Stat {
 
-	private final double total;
-	private final int count;
+	private final BigDecimal total;
+	private final Long count;
 
-	public Stat(double newTotal, int newCount) {
+	public Stat(BigDecimal newTotal, Long newCount) {
 		total = newTotal;
 		count = newCount;
 	}
 
-	public double getTotal() {
+	public BigDecimal getTotal() {
 		return total;
 	}
 
-	public int getCount() {
+	public Long getCount() {
 		return count;
 	}
 
-	public double getAverage() {
-		return total / count;
+	public BigDecimal getAverage() {
+		return BigDecimal.valueOf(total.doubleValue() / count);
 	}
 
 	public Stat deepCopy() {

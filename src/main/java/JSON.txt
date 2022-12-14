@@ -12,3 +12,4 @@ DELETE /purchases       request body: {"ids": [<long>, <long>, ...]}
 GET /count              response: {<integer>}
 GET /stat/annual        response: {"annualStats": [{"year": <integer>, "total": <double>, "count": <integer>, "average": <double>}, ...]}
 GET /stat/months        response: {"monthlyStats": [{"year": <integer>, "month": <integer>, "total": <double>, "count": <integer>, "average": <double>}, ...]}
+GET /stat/full          response: {"fullStats": {"total": <double>, "count": <integer>, "average": <double>}}

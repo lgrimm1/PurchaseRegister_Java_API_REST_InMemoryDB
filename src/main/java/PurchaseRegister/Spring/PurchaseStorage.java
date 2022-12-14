@@ -3,6 +3,7 @@ package PurchaseRegister.Spring;
 import PurchaseRegister.DataModels.*;
 import org.springframework.stereotype.*;
 
+import java.math.*;
 import java.time.*;
 import java.util.*;
 import java.util.stream.*;
@@ -13,8 +14,8 @@ import java.util.stream.*;
  * @see #nextID()
  * @see #indexOf(long)
  * @see #get(long)
- * @see #add(LocalDate, Purchase.PurchaseType, double, String)
- * @see #modify(long, LocalDate, Purchase.PurchaseType, double, String)
+ * @see #add(LocalDate, Purchase.PurchaseType, BigDecimal, String)
+ * @see #modify(Long, LocalDate, Purchase.PurchaseType, BigDecimal, String)
  * @see #delete(long)
  * @see #count()
  * @see #clear()
@@ -27,19 +28,19 @@ import java.util.stream.*;
 public class PurchaseStorage {
 
 	private final List<Purchase> purchaseList;
-	private Long actualGreatestId;
+	private long actualGreatestId;
 
 	public PurchaseStorage() {
 		purchaseList = new ArrayList<>();
-		actualGreatestId = null;
+		actualGreatestId = Long.MIN_VALUE;
 	}
 
-	private Long nextID() {
-		if (actualGreatestId == null) {
-			return Long.MIN_VALUE;
-		}
+	/**
+	 * Long.MIN_VALUE marks there is no ID served yet or there is no ID left to be served.
+	 */
+	private long nextID() {
 		if (actualGreatestId == Long.MAX_VALUE) {
-			return null;
+			return Long.MIN_VALUE;
 		}
 		return actualGreatestId + 1;
 	}
@@ -61,23 +62,22 @@ public class PurchaseStorage {
 
 	/**
 	 * Returns the ID of the added Purchase.<p>
-	 * In case Purchase arguments are not proper, returns null.
+	 * In case Purchase arguments are not proper, returns Long.MIN_VALUE.
 	 */
-	public Long add(LocalDate dateOfPurchase, Purchase.PurchaseType typeOfPurchase, double valueOfPurchase, String descriptionOfPurchase) {
-		if (dateOfPurchase == null || typeOfPurchase == null || descriptionOfPurchase == null) {
-			return null;
+	public long add(LocalDate dateOfPurchase, Purchase.PurchaseType typeOfPurchase, BigDecimal valueOfPurchase, String descriptionOfPurchase) {
+		if (dateOfPurchase == null || typeOfPurchase == null || valueOfPurchase == null || descriptionOfPurchase == null) {
+			return Long.MIN_VALUE;
 		}
-		Long nextIdCandidate = nextID();
-		if (nextIdCandidate == null) {
-			return null;
+		long nextIdCandidate = nextID();
+		if (nextIdCandidate > Long.MIN_VALUE) {
+			actualGreatestId = nextIdCandidate;
+			purchaseList.add(new Purchase(actualGreatestId, dateOfPurchase, typeOfPurchase, valueOfPurchase, descriptionOfPurchase));
 		}
-		actualGreatestId = nextIdCandidate;
-		purchaseList.add(new Purchase(actualGreatestId, dateOfPurchase, typeOfPurchase, valueOfPurchase, descriptionOfPurchase));
-		return actualGreatestId;
+		return nextIdCandidate;
 	}
 
-	public boolean modify(long id, LocalDate dateOfPurchase, Purchase.PurchaseType typeOfPurchase, double valueOfPurchase, String descriptionOfPurchase) {
-		if (dateOfPurchase == null || typeOfPurchase == null || descriptionOfPurchase == null) {
+	public boolean modify(Long id, LocalDate dateOfPurchase, Purchase.PurchaseType typeOfPurchase, BigDecimal valueOfPurchase, String descriptionOfPurchase) {
+		if (id == null || dateOfPurchase == null || typeOfPurchase == null || valueOfPurchase == null || descriptionOfPurchase == null) {
 			return false;
 		}
 		int itemIndex = indexOf(id);
@@ -110,7 +110,7 @@ public class PurchaseStorage {
 	}
 
 	public long getMinimumId() {
-		return Long.MIN_VALUE;
+		return Long.MIN_VALUE + 1;
 	}
 
 	public long getMaximumId() {
