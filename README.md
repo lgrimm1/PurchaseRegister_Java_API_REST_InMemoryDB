@@ -5,4 +5,4 @@
 <p>Libraries: Java Core, Spring.Boot, Mockito</p>
 <p>Build system: Maven</p>
 <p>IDE: IntelliJ IDEA</p>
-<p>Demonstrated knowledge: Clean Code, Best Practices, Test-driven Development, Unit Test, Streams, REST API</p>
+<p>Demonstrated knowledge: Clean Code, Best Practices, Test-driven Development, Unit Test, Streams, REST API, List-based in-memory storage with Stream-based search</p>
