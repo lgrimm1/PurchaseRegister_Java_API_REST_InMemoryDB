@@ -2,30 +2,28 @@ package PurchaseRegister.DataModels;
 
 import org.junit.jupiter.api.*;
 
-import java.math.*;
-
 class StatTest {
 
 	@Test
 	void constructStat() {
-		Stat stat = new Stat(BigDecimal.valueOf(50), 2L);
-		Assertions.assertEquals(50D, stat.getTotal().doubleValue());
-		Assertions.assertEquals(2L, stat.getCount());
-		Assertions.assertEquals(25D, stat.getAverage().doubleValue());
+		Stat stat = new Stat(50D, 2);
+		Assertions.assertEquals(50D, stat.getTotal());
+		Assertions.assertEquals(2, stat.getCount());
+		Assertions.assertEquals(25D, stat.getAverage());
 
-		stat = new Stat(BigDecimal.valueOf(-5), 5L);
-		Assertions.assertEquals(-5D, stat.getTotal().doubleValue());
-		Assertions.assertEquals(5L, stat.getCount());
-		Assertions.assertEquals(-1D, stat.getAverage().doubleValue());
+		stat = new Stat(-5D, 5);
+		Assertions.assertEquals(-5D, stat.getTotal());
+		Assertions.assertEquals(5, stat.getCount());
+		Assertions.assertEquals(-1D, stat.getAverage());
 	}
 
 	@Test
 	void copy() {
-		Stat stat = new Stat(BigDecimal.valueOf(50), 2L);
+		Stat stat = new Stat(50D, 2);
 		Stat statCopy = stat.deepCopy();
-		stat = new Stat(BigDecimal.valueOf(2), 1L);
-		Assertions.assertEquals(50D, statCopy.getTotal().doubleValue());
-		Assertions.assertEquals(2L, statCopy.getCount());
-		Assertions.assertEquals(25D, statCopy.getAverage().doubleValue());
+		stat = new Stat(2D, 1);
+		Assertions.assertEquals(50D, statCopy.getTotal());
+		Assertions.assertEquals(2, statCopy.getCount());
+		Assertions.assertEquals(25D, statCopy.getAverage());
 	}
 }

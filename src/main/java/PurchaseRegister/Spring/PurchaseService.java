@@ -9,10 +9,10 @@ import java.util.*;
 /**
  * Service class of PurchaseController class.
  * @see #PurchaseService(PurchaseStorage)
- * @see #getPurchaseById(Long)
+ * @see #getPurchaseById(long)
  * @see #addNewPurchase(Purchase)
  * @see #modifyPurchase(Purchase)
- * @see #deletePurchase(Long)
+ * @see #deletePurchase(long)
  * @see #getPurchases()
  * @see #deletePurchases(List)
  * @see #countPurchases()
@@ -31,7 +31,7 @@ public class PurchaseService {
 		this.purchaseStorage = purchaseStorage;
 	}
 
-	public Purchase getPurchaseById(Long id) {
+	public Purchase getPurchaseById(long id) {
 		return purchaseStorage.get(id);
 	}
 
@@ -62,10 +62,7 @@ public class PurchaseService {
 				newPurchase.getPurchaseDescription());
 	}
 
-	public Boolean deletePurchase(Long id) {
-		if (id == null) {
-			return false;
-		}
+	public Boolean deletePurchase(long id) {
 		return purchaseStorage.delete(id);
 	}
 
@@ -99,7 +96,7 @@ public class PurchaseService {
 				.forEach(statMap::put);
 		return statMap.stream()
 				.map(entry -> new StatAnnualTransfer(
-						(long) entry.getKey().getYear(),
+						entry.getKey().getYear(),
 						entry.getValue().getTotal(),
 						entry.getValue().getCount(),
 						entry.getValue().getAverage()))
@@ -112,8 +109,8 @@ public class PurchaseService {
 				.forEach(statMap::put);
 		return statMap.stream()
 				.map(entry -> new StatMonthlyTransfer(
-						(long) entry.getKey().getYear(),
-						(long) entry.getKey().getMonthValue(),
+						entry.getKey().getYear(),
+						entry.getKey().getMonthValue(),
 						entry.getValue().getTotal(),
 						entry.getValue().getCount(),
 						entry.getValue().getAverage()))

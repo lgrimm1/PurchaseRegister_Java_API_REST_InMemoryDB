@@ -1,8 +1,10 @@
 package PurchaseRegister.DataModels;
 
+import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.databind.*;
 import org.junit.jupiter.api.*;
 
-import java.math.*;
+import java.io.*;
 import java.time.*;
 
 class PurchaseTest {
@@ -12,12 +14,12 @@ class PurchaseTest {
 		Purchase p = new Purchase(3L,
 				null,
 				null,
-				BigDecimal.valueOf(12),
+				12D,
 				null);
 		Assertions.assertEquals(3L, p.getPurchaseId());
 		Assertions.assertNull(p.getPurchaseDate());
 		Assertions.assertNull(p.getPurchaseType());
-		Assertions.assertEquals(12D, p.getPurchaseValue().doubleValue());
+		Assertions.assertEquals(12D, p.getPurchaseValue());
 		Assertions.assertNull(p.getPurchaseDescription());
 	}
 
@@ -26,12 +28,12 @@ class PurchaseTest {
 		Purchase p = new Purchase(3L,
 				null,
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"abc");
 		Assertions.assertEquals(3L, p.getPurchaseId());
 		Assertions.assertNull(p.getPurchaseDate());
 		Assertions.assertEquals(Purchase.PurchaseType.CARD, p.getPurchaseType());
-		Assertions.assertEquals(12D, p.getPurchaseValue().doubleValue());
+		Assertions.assertEquals(12D, p.getPurchaseValue());
 		Assertions.assertEquals("abc", p.getPurchaseDescription());
 	}
 
@@ -41,12 +43,12 @@ class PurchaseTest {
 				3L,
 				LocalDate.now(),
 				null,
-				BigDecimal.valueOf(12),
+				12D,
 				"abc");
 		Assertions.assertEquals(3L, p.getPurchaseId());
 		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
 		Assertions.assertNull(p.getPurchaseType());
-		Assertions.assertEquals(12D, p.getPurchaseValue().doubleValue());
+		Assertions.assertEquals(12D, p.getPurchaseValue());
 		Assertions.assertEquals("abc", p.getPurchaseDescription());
 	}
 
@@ -56,12 +58,12 @@ class PurchaseTest {
 				3L,
 				LocalDate.now(),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				null);
 		Assertions.assertEquals(3L, p.getPurchaseId());
 		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
 		Assertions.assertEquals(Purchase.PurchaseType.CARD, p.getPurchaseType());
-		Assertions.assertEquals(12D, p.getPurchaseValue().doubleValue());
+		Assertions.assertEquals(12D, p.getPurchaseValue());
 		Assertions.assertNull(p.getPurchaseDescription());
 	}
 
@@ -71,12 +73,12 @@ class PurchaseTest {
 				Long.MIN_VALUE,
 				LocalDate.now(),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"");
 		Assertions.assertEquals(Long.MIN_VALUE, p.getPurchaseId());
 		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
 		Assertions.assertEquals(Purchase.PurchaseType.CARD, p.getPurchaseType());
-		Assertions.assertEquals(12D, p.getPurchaseValue().doubleValue());
+		Assertions.assertEquals(12D, p.getPurchaseValue());
 		Assertions.assertTrue(p.getPurchaseDescription().isEmpty());
 	}
 
@@ -86,12 +88,12 @@ class PurchaseTest {
 				Long.MAX_VALUE,
 				LocalDate.now(),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"");
 		Assertions.assertEquals(Long.MAX_VALUE, p.getPurchaseId());
 		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
 		Assertions.assertEquals(Purchase.PurchaseType.CARD, p.getPurchaseType());
-		Assertions.assertEquals(12D, p.getPurchaseValue().doubleValue());
+		Assertions.assertEquals(12D, p.getPurchaseValue());
 		Assertions.assertTrue(p.getPurchaseDescription().isEmpty());
 	}
 
@@ -101,12 +103,12 @@ class PurchaseTest {
 				3L,
 				LocalDate.now(),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"");
 		Assertions.assertEquals(3L, p.getPurchaseId());
 		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
 		Assertions.assertEquals(Purchase.PurchaseType.CARD, p.getPurchaseType());
-		Assertions.assertEquals(12D, p.getPurchaseValue().doubleValue());
+		Assertions.assertEquals(12D, p.getPurchaseValue());
 		Assertions.assertTrue(p.getPurchaseDescription().isEmpty());
 	}
 
@@ -116,12 +118,12 @@ class PurchaseTest {
 				3L,
 				LocalDate.now(),
 				Purchase.PurchaseType.CASH,
-				BigDecimal.valueOf(12),
+				12D,
 				"");
 		Assertions.assertEquals(3L, p.getPurchaseId());
 		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
 		Assertions.assertEquals(Purchase.PurchaseType.CASH, p.getPurchaseType());
-		Assertions.assertEquals(12D, p.getPurchaseValue().doubleValue());
+		Assertions.assertEquals(12D, p.getPurchaseValue());
 		Assertions.assertTrue(p.getPurchaseDescription().isEmpty());
 	}
 
@@ -131,12 +133,12 @@ class PurchaseTest {
 				3L,
 				LocalDate.now(),
 				Purchase.PurchaseType.INTERNET,
-				BigDecimal.valueOf(12),
+				12D,
 				"");
 		Assertions.assertEquals(3L, p.getPurchaseId());
 		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
 		Assertions.assertEquals(Purchase.PurchaseType.INTERNET, p.getPurchaseType());
-		Assertions.assertEquals(12D, p.getPurchaseValue().doubleValue());
+		Assertions.assertEquals(12D, p.getPurchaseValue());
 		Assertions.assertTrue(p.getPurchaseDescription().isEmpty());
 	}
 
@@ -146,12 +148,12 @@ class PurchaseTest {
 				3L,
 				LocalDate.now(),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(Double.MIN_VALUE),
+				Double.MIN_VALUE,
 				"");
 		Assertions.assertEquals(3L, p.getPurchaseId());
 		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
 		Assertions.assertEquals(Purchase.PurchaseType.CARD, p.getPurchaseType());
-		Assertions.assertEquals(Double.MIN_VALUE, p.getPurchaseValue().doubleValue());
+		Assertions.assertEquals(Double.MIN_VALUE, p.getPurchaseValue());
 		Assertions.assertTrue(p.getPurchaseDescription().isEmpty());
 	}
 
@@ -161,12 +163,12 @@ class PurchaseTest {
 				3L,
 				LocalDate.now(),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(Double.MAX_VALUE),
+				Double.MAX_VALUE,
 				"");
 		Assertions.assertEquals(3L, p.getPurchaseId());
 		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
 		Assertions.assertEquals(Purchase.PurchaseType.CARD, p.getPurchaseType());
-		Assertions.assertEquals(Double.MAX_VALUE, p.getPurchaseValue().doubleValue());
+		Assertions.assertEquals(Double.MAX_VALUE, p.getPurchaseValue());
 		Assertions.assertTrue(p.getPurchaseDescription().isEmpty());
 	}
 
@@ -176,12 +178,12 @@ class PurchaseTest {
 				3L,
 				LocalDate.now(),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"");
 		Assertions.assertEquals(3L, p.getPurchaseId());
 		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
 		Assertions.assertEquals(Purchase.PurchaseType.CARD, p.getPurchaseType());
-		Assertions.assertEquals(12D, p.getPurchaseValue().doubleValue());
+		Assertions.assertEquals(12D, p.getPurchaseValue());
 		Assertions.assertTrue(p.getPurchaseDescription().isEmpty());
 	}
 
@@ -191,12 +193,13 @@ class PurchaseTest {
 				3L,
 				LocalDate.now(),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"abc");
 		Assertions.assertEquals(3L, p.getPurchaseId());
 		Assertions.assertEquals(LocalDate.now(), p.getPurchaseDate());
 		Assertions.assertEquals(Purchase.PurchaseType.CARD, p.getPurchaseType());
-		Assertions.assertEquals(12D, p.getPurchaseValue().doubleValue());
+		Assertions.assertEquals(12D, p.getPurchaseValue());
 		Assertions.assertEquals("abc", p.getPurchaseDescription());
 	}
+
 }

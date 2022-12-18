@@ -2,7 +2,6 @@ package PurchaseRegister.DataModels;
 
 import org.junit.jupiter.api.*;
 
-import java.math.*;
 import java.time.*;
 
 class StatMapTest {
@@ -44,30 +43,30 @@ class StatMapTest {
 				1L,
 				LocalDate.of(2000, 6, 2),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"something")));
 		Assertions.assertEquals(1, sm.count());
 
 		Stat stat = sm.get(LocalDate.of(2000, 6, 2));
 		Assertions.assertNotNull(stat);
-		Assertions.assertEquals(12D, stat.getTotal().doubleValue());
-		Assertions.assertEquals(1L, stat.getCount());
-		Assertions.assertEquals(12D, stat.getAverage().doubleValue());
+		Assertions.assertEquals(12D, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(12D, stat.getAverage());
 
 		stat = sm.get(LocalDate.of(2001, 6, 2));
 		Assertions.assertNull(stat);
 
 		stat = sm.get(LocalDate.of(2000, 7, 2));
 		Assertions.assertNotNull(stat);
-		Assertions.assertEquals(12D, stat.getTotal().doubleValue());
-		Assertions.assertEquals(1L, stat.getCount());
-		Assertions.assertEquals(12D, stat.getAverage().doubleValue());
+		Assertions.assertEquals(12D, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(12D, stat.getAverage());
 
 		stat = sm.get(LocalDate.of(2000, 6, 3));
 		Assertions.assertNotNull(stat);
-		Assertions.assertEquals(12D, stat.getTotal().doubleValue());
-		Assertions.assertEquals(1L, stat.getCount());
-		Assertions.assertEquals(12D, stat.getAverage().doubleValue());
+		Assertions.assertEquals(12D, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(12D, stat.getAverage());
 	}
 
 	@Test
@@ -77,21 +76,21 @@ class StatMapTest {
 				1L,
 				LocalDate.of(2000, 6, 2),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"something")));
 		Assertions.assertTrue(sm.put(new Purchase(
 				1L,
 				LocalDate.of(2000, 8, 3),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(36),
+				36D,
 				"something")));
 
 		Assertions.assertEquals(1, sm.count());
 		Stat stat = sm.get(LocalDate.of(2000, 12, 1));
 		Assertions.assertNotNull(stat);
-		Assertions.assertEquals(48D, stat.getTotal().doubleValue());
+		Assertions.assertEquals(48D, stat.getTotal());
 		Assertions.assertEquals(2, stat.getCount());
-		Assertions.assertEquals(24D, stat.getAverage().doubleValue());
+		Assertions.assertEquals(24D, stat.getAverage());
 	}
 
 	@Test
@@ -101,28 +100,28 @@ class StatMapTest {
 				1L,
 				LocalDate.of(2000, 6, 2),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"something")));
 		Assertions.assertTrue(sm.put(new Purchase(
 				1L,
 				LocalDate.of(2001, 6, 2),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(36),
+				36D,
 				"something")));
 
 		Assertions.assertEquals(2, sm.count());
 
 		Stat stat = sm.get(LocalDate.of(2000, 12, 12));
 		Assertions.assertNotNull(stat);
-		Assertions.assertEquals(12D, stat.getTotal().doubleValue());
-		Assertions.assertEquals(1L, stat.getCount());
-		Assertions.assertEquals(12D, stat.getAverage().doubleValue());
+		Assertions.assertEquals(12D, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(12D, stat.getAverage());
 
 		stat = sm.get(LocalDate.of(2001, 12, 12));
 		Assertions.assertNotNull(stat);
-		Assertions.assertEquals(36D, stat.getTotal().doubleValue());
-		Assertions.assertEquals(1L, stat.getCount());
-		Assertions.assertEquals(36D, stat.getAverage().doubleValue());
+		Assertions.assertEquals(36D, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(36D, stat.getAverage());
 	}
 
 	@Test
@@ -132,15 +131,15 @@ class StatMapTest {
 				1L,
 				LocalDate.of(2000, 6, 2),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"something")));
 		Assertions.assertEquals(1, sm.count());
 
 		Stat stat = sm.get(LocalDate.of(2000, 6, 2));
 		Assertions.assertNotNull(stat);
-		Assertions.assertEquals(12D, stat.getTotal().doubleValue());
-		Assertions.assertEquals(1L, stat.getCount());
-		Assertions.assertEquals(12D, stat.getAverage().doubleValue());
+		Assertions.assertEquals(12D, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(12D, stat.getAverage());
 
 		stat = sm.get(LocalDate.of(2001, 6, 2));
 		Assertions.assertNull(stat);
@@ -150,9 +149,9 @@ class StatMapTest {
 
 		stat = sm.get(LocalDate.of(2000, 6, 3));
 		Assertions.assertNotNull(stat);
-		Assertions.assertEquals(12D, stat.getTotal().doubleValue());
-		Assertions.assertEquals(1L, stat.getCount());
-		Assertions.assertEquals(12D, stat.getAverage().doubleValue());
+		Assertions.assertEquals(12D, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(12D, stat.getAverage());
 	}
 
 	@Test
@@ -162,21 +161,21 @@ class StatMapTest {
 				1L,
 				LocalDate.of(2000, 6, 2),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"something")));
 		Assertions.assertTrue(sm.put(new Purchase(
 				1L,
 				LocalDate.of(2000, 6, 3),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(36),
+				36D,
 				"something")));
 
 		Assertions.assertEquals(1, sm.count());
 		Stat stat = sm.get(LocalDate.of(2000, 6, 1));
 		Assertions.assertNotNull(stat);
-		Assertions.assertEquals(48D, stat.getTotal().doubleValue());
-		Assertions.assertEquals(2L, stat.getCount());
-		Assertions.assertEquals(24D, stat.getAverage().doubleValue());
+		Assertions.assertEquals(48D, stat.getTotal());
+		Assertions.assertEquals(2, stat.getCount());
+		Assertions.assertEquals(24D, stat.getAverage());
 	}
 
 	@Test
@@ -186,40 +185,40 @@ class StatMapTest {
 				1L,
 				LocalDate.of(2000, 6, 2),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"something")));
 		Assertions.assertTrue(sm.put(new Purchase(
 				1L,
 				LocalDate.of(2000, 8, 2),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(36),
+				36D,
 				"something")));
 		Assertions.assertTrue(sm.put(new Purchase(
 				1L,
 				LocalDate.of(2001, 6, 2),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(50),
+				50D,
 				"something")));
 
 		Assertions.assertEquals(3, sm.count());
 
 		Stat stat = sm.get(LocalDate.of(2000, 6, 12));
 		Assertions.assertNotNull(stat);
-		Assertions.assertEquals(12D, stat.getTotal().doubleValue());
-		Assertions.assertEquals(1L, stat.getCount());
-		Assertions.assertEquals(12D, stat.getAverage().doubleValue());
+		Assertions.assertEquals(12D, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(12D, stat.getAverage());
 
 		stat = sm.get(LocalDate.of(2000, 8, 12));
 		Assertions.assertNotNull(stat);
-		Assertions.assertEquals(36D, stat.getTotal().doubleValue());
-		Assertions.assertEquals(1L, stat.getCount());
-		Assertions.assertEquals(36D, stat.getAverage().doubleValue());
+		Assertions.assertEquals(36D, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(36D, stat.getAverage());
 
 		stat = sm.get(LocalDate.of(2001, 6, 12));
 		Assertions.assertNotNull(stat);
-		Assertions.assertEquals(50D, stat.getTotal().doubleValue());
-		Assertions.assertEquals(1L, stat.getCount());
-		Assertions.assertEquals(50D, stat.getAverage().doubleValue());
+		Assertions.assertEquals(50D, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(50D, stat.getAverage());
 	}
 
 	@Test
@@ -229,21 +228,21 @@ class StatMapTest {
 				1L,
 				LocalDate.of(2000, 6, 2),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"something")));
 		Assertions.assertEquals(1, sm.count());
 
 		Stat stat = sm.get(LocalDate.of(2000, 6, 2));
 		Assertions.assertNotNull(stat);
-		Assertions.assertEquals(12D, stat.getTotal().doubleValue());
-		Assertions.assertEquals(1L, stat.getCount());
-		Assertions.assertEquals(12D, stat.getAverage().doubleValue());
+		Assertions.assertEquals(12D, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(12D, stat.getAverage());
 
 		stat = sm.get(LocalDate.of(2001, 7, 8));
 		Assertions.assertNotNull(stat);
-		Assertions.assertEquals(12D, stat.getTotal().doubleValue());
-		Assertions.assertEquals(1L, stat.getCount());
-		Assertions.assertEquals(12D, stat.getAverage().doubleValue());
+		Assertions.assertEquals(12D, stat.getTotal());
+		Assertions.assertEquals(1, stat.getCount());
+		Assertions.assertEquals(12D, stat.getAverage());
 	}
 
 	@Test
@@ -253,21 +252,21 @@ class StatMapTest {
 				1L,
 				LocalDate.of(2000, 6, 2),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"something")));
 		Assertions.assertTrue(sm.put(new Purchase(
 				1L,
 				LocalDate.of(2001, 8, 3),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(36),
+				36D,
 				"something")));
 
 		Assertions.assertEquals(1, sm.count());
 		Stat stat = sm.get(LocalDate.of(2010, 12, 1));
 		Assertions.assertNotNull(stat);
-		Assertions.assertEquals(48D, stat.getTotal().doubleValue());
-		Assertions.assertEquals(2L, stat.getCount());
-		Assertions.assertEquals(24D, stat.getAverage().doubleValue());
+		Assertions.assertEquals(48D, stat.getTotal());
+		Assertions.assertEquals(2, stat.getCount());
+		Assertions.assertEquals(24D, stat.getAverage());
 	}
 
 	@Test
@@ -277,19 +276,19 @@ class StatMapTest {
 				1L,
 				LocalDate.of(2000, 6, 2),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"something"));
 		sm.put(new Purchase(
 				2L,
 				LocalDate.of(2000, 8, 12),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(24),
+				24D,
 				"something"));
 		sm.put(new Purchase(
 				3L,
 				LocalDate.of(2001, 12, 2),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(48),
+				48D,
 				"something"));
 
 		Assertions.assertEquals(2, sm.stream().count());
@@ -298,7 +297,7 @@ class StatMapTest {
 				.sum();
 		Assertions.assertEquals(4001, yearAsSummarizedValue);
 		double totalValue = sm.stream()
-				.mapToDouble(entry -> entry.getValue().getTotal().doubleValue())
+				.mapToDouble(entry -> entry.getValue().getTotal())
 				.sum();
 		Assertions.assertEquals(84D, totalValue);
 	}
@@ -310,19 +309,19 @@ class StatMapTest {
 				1L,
 				LocalDate.of(2000, 6, 2),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"something"));
 		sm.put(new Purchase(
 				2L,
 				LocalDate.of(2000, 6, 12),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(24),
+				24D,
 				"something"));
 		sm.put(new Purchase(
 				3L,
 				LocalDate.of(2000, 12, 2),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(48),
+				48D,
 				"something"));
 
 		Assertions.assertEquals(2, sm.stream().count());
@@ -335,7 +334,7 @@ class StatMapTest {
 				.sum();
 		Assertions.assertEquals(18, monthAsSummarizedValue);
 		double totalValue = sm.stream()
-				.mapToDouble(entry -> entry.getValue().getTotal().doubleValue())
+				.mapToDouble(entry -> entry.getValue().getTotal())
 				.sum();
 		Assertions.assertEquals(84D, totalValue);
 	}
@@ -347,24 +346,24 @@ class StatMapTest {
 				1L,
 				LocalDate.of(2000, 6, 2),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"something"));
 		sm.put(new Purchase(
 				2L,
 				LocalDate.of(2000, 6, 12),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(24),
+				24D,
 				"something"));
 		sm.put(new Purchase(
 				3L,
 				LocalDate.of(2000, 12, 2),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(48),
+				48D,
 				"something"));
 
 		Assertions.assertEquals(1, sm.stream().count());
 		double totalValue = sm.stream()
-				.mapToDouble(entry -> entry.getValue().getTotal().doubleValue())
+				.mapToDouble(entry -> entry.getValue().getTotal())
 				.sum();
 		Assertions.assertEquals(84d, totalValue);
 	}

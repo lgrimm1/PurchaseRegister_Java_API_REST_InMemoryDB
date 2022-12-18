@@ -1,6 +1,5 @@
 package PurchaseRegister.DataModels;
 
-import java.math.*;
 import java.time.*;
 import java.util.*;
 import java.util.stream.*;
@@ -49,10 +48,10 @@ public class StatMap {
 		};
 		if (statMap.containsKey(usedDate)) {
 			Stat stat = statMap.get(usedDate);
-			statMap.put(usedDate, new Stat(BigDecimal.valueOf(stat.getTotal().doubleValue() + newPurchase.getPurchaseValue().doubleValue()), stat.getCount() + 1));
+			statMap.put(usedDate, new Stat(stat.getTotal() + newPurchase.getPurchaseValue(), stat.getCount() + 1));
 		}
 		else {
-			statMap.put(usedDate, new Stat(newPurchase.getPurchaseValue(), 1L));
+			statMap.put(usedDate, new Stat(newPurchase.getPurchaseValue(), 1));
 		}
 		return true;
 	}

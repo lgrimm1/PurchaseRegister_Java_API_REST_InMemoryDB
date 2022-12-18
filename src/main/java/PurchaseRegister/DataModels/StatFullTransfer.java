@@ -1,36 +1,33 @@
 package PurchaseRegister.DataModels;
 
-import java.io.*;
-import java.math.*;
-
 /**
  * This class represent data element of full statistical data transfer towards frontend.
- * @see #StatFullTransfer(BigDecimal, Long, BigDecimal)
+ * @see #StatFullTransfer(double, int, double)
  * @see #getTotal()
  * @see #getCount()
  * @see #getAverage()
  * @author Laszlo Grimm
  */
-public class StatFullTransfer implements Serializable {
-	private final BigDecimal total;
-	private final Long count;
-	private final BigDecimal average;
+public class StatFullTransfer {
+	private final double total;
+	private final int count;
+	private final double average;
 
-	public StatFullTransfer(BigDecimal total, Long count, BigDecimal average) {
+	public StatFullTransfer(double total, int count, double average) {
 		this.total = total;
 		this.count = count;
 		this.average = average;
 	}
 
-	public BigDecimal getTotal() {
+	public double getTotal() {
 		return total;
 	}
 
-	public Long getCount() {
+	public int getCount() {
 		return count;
 	}
 
-	public BigDecimal getAverage() {
+	public double getAverage() {
 		return average;
 	}
 }

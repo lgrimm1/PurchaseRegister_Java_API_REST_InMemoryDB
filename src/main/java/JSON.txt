@@ -1,15 +1,15 @@
 Endpoints
 -------------------
-GET /purchase/id        response: {"purchaseId": <long>, "purchaseDate": <YYYY-MM-DD>, "purchaseType": "CARD"|"CASH"|"INTERNET", "purchaseValue": <double>, "purchaseDescription": <string>}
-PUT /newPurchase        request body: {"purchaseId": <long>, "purchaseDate": <YYYY-MM-DD>, "purchaseType": "CARD"|"CASH"|"INTERNET", "purchaseValue": <double>, "purchaseDescription": <string>}
+GET /purchase/id        response: {"purchaseId": <long>, "purchaseDate": "<YYYY-MM-DD>", "purchaseType": "CARD"|"CASH"|"INTERNET", "purchaseValue": <double>, "purchaseDescription": <string>}
+PUT /newPurchase        request body: {"purchaseId": <long>, "purchaseDate": "<YYYY-MM-DD>", "purchaseType": "CARD"|"CASH"|"INTERNET", "purchaseValue": <double>, "purchaseDescription": <string>}
                         response: {"id": <long>}
-PUT /purchase           request body: {"purchaseId": <long>, "purchaseDate": <YYYY-MM-DD>, "purchaseType": "CARD"|"CASH"|"INTERNET", "purchaseValue": <double>, "purchaseDescription": <string>}
+PUT /purchase           request body: {"purchaseId": <long>, "purchaseDate": "<YYYY-MM-DD>", "purchaseType": "CARD"|"CASH"|"INTERNET", "purchaseValue": <double>, "purchaseDescription": <string>}
                         response: {true|false}
 DELETE /purchase/id     response: {true|false}
-GET /purchases          response:  {"purchases": [{"purchaseId": <long>, "purchaseDate": <YYYY-MM-DD>, "purchaseType": "CARD"|"CASH"|"INTERNET", "purchaseValue": <double>, "purchaseDescription": <string>}, ...]}
-DELETE /purchases       request body: {"ids": [<long>, <long>, ...]}
-                        response: {"deletedIds": [<long>, <long>, ...]}
+GET /purchases          response:  [{"purchaseId": <long>, "purchaseDate": "<YYYY-MM-DD>", "purchaseType": "CARD"|"CASH"|"INTERNET", "purchaseValue": <double>, "purchaseDescription": <string>}, ...]
+DELETE /purchases       request body: [<long>, ...]
+                        response: {[<long>, ...]}
 GET /count              response: {<integer>}
-GET /stat/annual        response: {"annualStats": [{"year": <integer>, "total": <double>, "count": <integer>, "average": <double>}, ...]}
-GET /stat/months        response: {"monthlyStats": [{"year": <integer>, "month": <integer>, "total": <double>, "count": <integer>, "average": <double>}, ...]}
-GET /stat/full          response: {"fullStats": {"total": <double>, "count": <integer>, "average": <double>}}
+GET /stat/annual        response: [{"year": <integer>, "total": <double>, "count": <integer>, "average": <double>}, ...]
+GET /stat/months        response: [{"year": <integer>, "month": <integer>, "total": <double>, "count": <integer>, "average": <double>}, ...]
+GET /stat/full          response: {"total": <double>, "count": <integer>, "average": <double>}

@@ -42,30 +42,8 @@ public class PurchaseController {
 
 	@PutMapping("/newPurchase")
 	@ResponseBody
-	public Long addNewPurchase(@RequestBody Purchase newPurchase) {
-		System.out.println("----- Entered into PurchaseController#addNewPurchase()");
-		if (newPurchase.getPurchaseDate() == null) {
-			System.out.println(
-					newPurchase.getPurchaseId() + " | " +
-					"null | " +
-					newPurchase.getPurchaseType() + " | " +
-					newPurchase.getPurchaseValue().doubleValue() + " | " +
-					newPurchase.getPurchaseDescription());
-		}
-		else {
-			System.out.println(
-					newPurchase.getPurchaseId() + " | " +
-					newPurchase.getPurchaseDate().getYear() + "-" +
-					newPurchase.getPurchaseDate().getMonthValue() + "-" +
-					newPurchase.getPurchaseDate().getDayOfMonth()+ " | " +
-					newPurchase.getPurchaseType() + " | " +
-					newPurchase.getPurchaseValue().doubleValue() + " | " +
-					newPurchase.getPurchaseDescription());
-		}
-		long result = service.addNewPurchase(newPurchase);
-		System.out.println("Result: " + result);
-//		return service.addNewPurchase(newPurchase);
-		return result;
+	public long addNewPurchase(@RequestBody Purchase newPurchase) {
+		return service.addNewPurchase(newPurchase);
 	}
 
 	@PutMapping("/purchase")

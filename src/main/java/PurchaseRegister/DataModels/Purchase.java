@@ -1,12 +1,11 @@
 package PurchaseRegister.DataModels;
 
-import java.math.*;
 import java.time.*;
 import java.util.*;
 
 /**
  * This class represents a purchase.
- * @see #Purchase(Long, LocalDate, PurchaseType, BigDecimal, String)
+ * @see #Purchase(long, LocalDate, PurchaseType, double, String)
  * @see #getPurchaseDate()
  * @see #getPurchaseType()
  * @see #getPurchaseValue()
@@ -23,10 +22,10 @@ public class Purchase {
 	private final Long purchaseId;
 	private final LocalDate purchaseDate;
 	private final PurchaseType purchaseType;
-	private final BigDecimal purchaseValue;
+	private final Double purchaseValue;
 	private final String purchaseDescription;
 
-	public Purchase(Long id, LocalDate dateOfPurchase, PurchaseType typeOfPurchase, BigDecimal valueOfPurchase, String descriptionOfPurchase) {
+	public Purchase(long id, LocalDate dateOfPurchase, PurchaseType typeOfPurchase, double valueOfPurchase, String descriptionOfPurchase) {
 		purchaseId = id;
 		purchaseDate = dateOfPurchase;
 		purchaseType = typeOfPurchase;
@@ -34,7 +33,7 @@ public class Purchase {
 		purchaseDescription = descriptionOfPurchase;
 	}
 
-	public Long getPurchaseId() {
+	public long getPurchaseId() {
 		return purchaseId;
 	}
 
@@ -46,7 +45,7 @@ public class Purchase {
 		return purchaseType;
 	}
 
-	public BigDecimal getPurchaseValue() {
+	public double getPurchaseValue() {
 		return purchaseValue;
 	}
 

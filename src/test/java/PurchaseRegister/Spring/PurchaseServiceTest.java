@@ -4,7 +4,6 @@ import PurchaseRegister.DataModels.*;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
 
-import java.math.*;
 import java.time.*;
 import java.util.*;
 
@@ -18,7 +17,7 @@ class PurchaseServiceTest {
 	void setUp() {
 		purchaseStorage = Mockito.mock(PurchaseStorage.class);
 		when(purchaseStorage.getMinimumId())
-				.thenReturn(Long.MIN_VALUE);
+				.thenReturn(Long.MIN_VALUE + 1);
 		purchaseService = new PurchaseService(purchaseStorage);
 	}
 
@@ -32,17 +31,17 @@ class PurchaseServiceTest {
 
 	@Test
 	void getPurchaseByIdWithResult() {
-		when(purchaseStorage.get(purchaseStorage.getMinimumId() + 1))
+		when(purchaseStorage.get(purchaseStorage.getMinimumId()))
 				.thenReturn(new Purchase(
 						Long.MIN_VALUE + 1,
 						LocalDate.of(2011, 4, 6),
 						Purchase.PurchaseType.CASH,
-						BigDecimal.valueOf(12),
+						12D,
 						"xyz"));
 
-		Purchase p = purchaseService.getPurchaseById(purchaseStorage.getMinimumId() + 1);
+		Purchase p = purchaseService.getPurchaseById(purchaseStorage.getMinimumId());
 		Assertions.assertNotNull(p);
-		Assertions.assertEquals(p, purchaseStorage.get(purchaseStorage.getMinimumId() + 1));
+		Assertions.assertEquals(p, purchaseStorage.get(purchaseStorage.getMinimumId()));
 	}
 
 	@Test
@@ -50,7 +49,7 @@ class PurchaseServiceTest {
 		when(purchaseStorage.add(
 				null,
 				null,
-				BigDecimal.valueOf(12),
+				12D,
 				null))
 				.thenReturn(Long.MIN_VALUE);
 
@@ -58,7 +57,7 @@ class PurchaseServiceTest {
 				3L,
 				null,
 				null,
-				BigDecimal.valueOf(12),
+				12D,
 				null)));
 	}
 
@@ -67,15 +66,15 @@ class PurchaseServiceTest {
 		when(purchaseStorage.add(
 				LocalDate.now(),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"abc"))
 				.thenReturn(Long.MIN_VALUE + 1);
 
-		Assertions.assertEquals(Long.MIN_VALUE + 1, purchaseService.addNewPurchase(new Purchase(
+		Assertions.assertEquals(purchaseStorage.getMinimumId(), purchaseService.addNewPurchase(new Purchase(
 				3L,
 				LocalDate.now(),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"abc")));
 	}
 
@@ -85,7 +84,7 @@ class PurchaseServiceTest {
 				3L,
 				LocalDate.now(),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"abc"
 				))
 				.thenReturn(false);
@@ -94,7 +93,7 @@ class PurchaseServiceTest {
 				3L,
 				LocalDate.now(),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				"abc")));
 	}
 
@@ -104,7 +103,7 @@ class PurchaseServiceTest {
 				3L,
 				LocalDate.now(),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				null
 				))
 				.thenReturn(true);
@@ -113,7 +112,7 @@ class PurchaseServiceTest {
 				3L,
 				LocalDate.now(),
 				Purchase.PurchaseType.CARD,
-				BigDecimal.valueOf(12),
+				12D,
 				null)));
 	}
 
@@ -140,7 +139,7 @@ class PurchaseServiceTest {
 						1L,
 						LocalDate.of(2010, 6, 3),
 						Purchase.PurchaseType.CARD,
-						BigDecimal.valueOf(12),
+						12D,
 						"abc")
 		);
 		when(purchaseStorage.stream())
@@ -177,25 +176,26 @@ class PurchaseServiceTest {
 						1L,
 						LocalDate.of(2010, 6, 3),
 						Purchase.PurchaseType.CARD,
-						BigDecimal.valueOf(12),
+						12D,
 						"abc"),
 				new Purchase(
 						1L,
 						LocalDate.of(2010, 8, 16),
 						Purchase.PurchaseType.CARD,
-						BigDecimal.valueOf(24),
+						24D,
 						"abc"),
 				new Purchase(
 						1L,
 						LocalDate.of(2020, 6, 3),
 						Purchase.PurchaseType.CARD,
-						BigDecimal.valueOf(48),
+						48D,
 						"abc")
 		);
 		when(purchaseStorage.stream())
 				.thenReturn(purchaseList.stream());
 
 		List<StatAnnualTransfer> generatedStatElements = purchaseService.generateAnnualStat();
+
 /*
 		expected result:
 		(2010L, 36D, 2L, 18D),
@@ -215,12 +215,12 @@ class PurchaseServiceTest {
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(statAnnualTransfer -> statAnnualTransfer.getTotal().doubleValue())
+				.mapToDouble(StatAnnualTransfer::getTotal)
 				.filter(n -> n == 36D)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(statAnnualTransfer -> statAnnualTransfer.getTotal().doubleValue())
+				.mapToDouble(StatAnnualTransfer::getTotal)
 				.filter(n -> n == 48D)
 				.count());
 
@@ -235,12 +235,12 @@ class PurchaseServiceTest {
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(statAnnualTransfer -> statAnnualTransfer.getAverage().doubleValue())
+				.mapToDouble(StatAnnualTransfer::getAverage)
 				.filter(n -> n == 18D)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(statAnnualTransfer -> statAnnualTransfer.getAverage().doubleValue())
+				.mapToDouble(StatAnnualTransfer::getAverage)
 				.filter(n -> n == 48D)
 				.count());
 	}
@@ -252,32 +252,33 @@ class PurchaseServiceTest {
 						1L,
 						LocalDate.of(2010, 6, 3),
 						Purchase.PurchaseType.CARD,
-						BigDecimal.valueOf(12),
+						12D,
 						"abc"),
 				new Purchase(
 						1L,
 						LocalDate.of(2010, 6, 16),
 						Purchase.PurchaseType.CARD,
-						BigDecimal.valueOf(24),
+						24D,
 						"abc"),
 				new Purchase(
 						1L,
 						LocalDate.of(2010, 8, 30),
 						Purchase.PurchaseType.CARD,
-						BigDecimal.valueOf(48),
+						48D,
 						"abc"),
 				new Purchase(
 
 						1L,
 						LocalDate.of(2020, 6, 16),
 						Purchase.PurchaseType.CARD,
-						BigDecimal.valueOf(99),
+						99D,
 						"abc")
 		);
 		when(purchaseStorage.stream())
 				.thenReturn(purchaseList.stream());
 
 		List<StatMonthlyTransfer> generatedStatElements = purchaseService.generateMonthlyStat();
+
 /*
 		expected result:
 		(2010L, 6L, 36D, 2L, 18D),
@@ -308,17 +309,17 @@ class PurchaseServiceTest {
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(statMonthlyTransfer -> statMonthlyTransfer.getTotal().doubleValue())
+				.mapToDouble(StatMonthlyTransfer::getTotal)
 				.filter(n -> n == 36D)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(statMonthlyTransfer -> statMonthlyTransfer.getTotal().doubleValue())
+				.mapToDouble(StatMonthlyTransfer::getTotal)
 				.filter(n -> n == 48D)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(statMonthlyTransfer -> statMonthlyTransfer.getTotal().doubleValue())
+				.mapToDouble(StatMonthlyTransfer::getTotal)
 				.filter(n -> n == 99D)
 				.count());
 
@@ -333,17 +334,17 @@ class PurchaseServiceTest {
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(statMonthlyTransfer -> statMonthlyTransfer.getAverage().doubleValue())
+				.mapToDouble(StatMonthlyTransfer::getAverage)
 				.filter(n -> n == 18D)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(statMonthlyTransfer -> statMonthlyTransfer.getAverage().doubleValue())
+				.mapToDouble(StatMonthlyTransfer::getAverage)
 				.filter(n -> n == 48D)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(statMonthlyTransfer -> statMonthlyTransfer.getAverage().doubleValue())
+				.mapToDouble(StatMonthlyTransfer::getAverage)
 				.filter(n -> n == 99D)
 				.count());
 	}
@@ -355,32 +356,33 @@ class PurchaseServiceTest {
 						1L,
 						LocalDate.of(2010, 6, 3),
 						Purchase.PurchaseType.CARD,
-						BigDecimal.valueOf(12),
+						12D,
 						"abc"),
 				new Purchase(
 						1L,
 						LocalDate.of(2010, 8, 16),
 						Purchase.PurchaseType.CARD,
-						BigDecimal.valueOf(24),
+						24D,
 						"abc"),
 				new Purchase(
 						1L,
 						LocalDate.of(2020, 6, 3),
 						Purchase.PurchaseType.CARD,
-						BigDecimal.valueOf(48),
+						48D,
 						"abc")
 		);
 		when(purchaseStorage.stream())
 				.thenReturn(purchaseList.stream());
 
 		StatFullTransfer generatedStatElements = purchaseService.generateFullStat();
+
 /*
 		expected result:
 		(84D, 3L, 28D)
 */
 
-		Assertions.assertEquals(84D, generatedStatElements.getTotal().doubleValue());
+		Assertions.assertEquals(84D, generatedStatElements.getTotal());
 		Assertions.assertEquals(3L, generatedStatElements.getCount());
-		Assertions.assertEquals(28D, generatedStatElements.getAverage().doubleValue());
+		Assertions.assertEquals(28D, generatedStatElements.getAverage());
 	}
 }

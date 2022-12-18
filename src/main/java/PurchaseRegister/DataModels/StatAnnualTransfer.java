@@ -1,43 +1,40 @@
 package PurchaseRegister.DataModels;
 
-import java.io.*;
-import java.math.*;
-
 /**
  * This class represent data element of annual statistical data transfer towards frontend.
- * @see #StatAnnualTransfer(Long, BigDecimal, Long, BigDecimal)
+ * @see #StatAnnualTransfer(int, double, int, double)
  * @see #getYear()
  * @see #getTotal()
  * @see #getCount()
  * @see #getAverage()
  * @author Laszlo Grimm
  */
-public class StatAnnualTransfer implements Serializable {
-	private final Long year;
-	private final BigDecimal total;
-	private final Long count;
-	private final BigDecimal average;
+public class StatAnnualTransfer {
+	private final int year;
+	private final double total;
+	private final int count;
+	private final double average;
 
-	public StatAnnualTransfer(Long year, BigDecimal total, Long count, BigDecimal average) {
+	public StatAnnualTransfer(int year, double total, int count, double average) {
 		this.year = year;
 		this.total = total;
 		this.count = count;
 		this.average = average;
 	}
 
-	public Long getYear() {
+	public int getYear() {
 		return year;
 	}
 
-	public BigDecimal getTotal() {
+	public double getTotal() {
 		return total;
 	}
 
-	public Long getCount() {
+	public int getCount() {
 		return count;
 	}
 
-	public BigDecimal getAverage() {
+	public double getAverage() {
 		return average;
 	}
 }

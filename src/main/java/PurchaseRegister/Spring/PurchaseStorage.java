@@ -3,7 +3,6 @@ package PurchaseRegister.Spring;
 import PurchaseRegister.DataModels.*;
 import org.springframework.stereotype.*;
 
-import java.math.*;
 import java.time.*;
 import java.util.*;
 import java.util.stream.*;
@@ -14,8 +13,8 @@ import java.util.stream.*;
  * @see #nextID()
  * @see #indexOf(long)
  * @see #get(long)
- * @see #add(LocalDate, Purchase.PurchaseType, BigDecimal, String)
- * @see #modify(Long, LocalDate, Purchase.PurchaseType, BigDecimal, String)
+ * @see #add(LocalDate, Purchase.PurchaseType, double, String)
+ * @see #modify(long, LocalDate, Purchase.PurchaseType, double, String)
  * @see #delete(long)
  * @see #count()
  * @see #clear()
@@ -64,8 +63,8 @@ public class PurchaseStorage {
 	 * Returns the ID of the added Purchase.<p>
 	 * In case Purchase arguments are not proper, returns Long.MIN_VALUE.
 	 */
-	public long add(LocalDate dateOfPurchase, Purchase.PurchaseType typeOfPurchase, BigDecimal valueOfPurchase, String descriptionOfPurchase) {
-		if (dateOfPurchase == null || typeOfPurchase == null || valueOfPurchase == null || descriptionOfPurchase == null) {
+	public long add(LocalDate dateOfPurchase, Purchase.PurchaseType typeOfPurchase, double valueOfPurchase, String descriptionOfPurchase) {
+		if (dateOfPurchase == null || typeOfPurchase == null || descriptionOfPurchase == null) {
 			return Long.MIN_VALUE;
 		}
 		long nextIdCandidate = nextID();
@@ -76,8 +75,8 @@ public class PurchaseStorage {
 		return nextIdCandidate;
 	}
 
-	public boolean modify(Long id, LocalDate dateOfPurchase, Purchase.PurchaseType typeOfPurchase, BigDecimal valueOfPurchase, String descriptionOfPurchase) {
-		if (id == null || dateOfPurchase == null || typeOfPurchase == null || valueOfPurchase == null || descriptionOfPurchase == null) {
+	public boolean modify(long id, LocalDate dateOfPurchase, Purchase.PurchaseType typeOfPurchase, double valueOfPurchase, String descriptionOfPurchase) {
+		if (dateOfPurchase == null || typeOfPurchase == null || descriptionOfPurchase == null) {
 			return false;
 		}
 		int itemIndex = indexOf(id);
