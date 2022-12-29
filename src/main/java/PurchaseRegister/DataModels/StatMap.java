@@ -23,9 +23,12 @@ public class StatMap {
 	private final HashMap<LocalDate, Stat> statMap;
 	private final StatType statType;
 
+	/**
+	 * In case of null argument, constructs an ANNUAL StatMap.
+	 */
 	public StatMap(StatType statType) {
 		statMap = new HashMap<>();
-		this.statType = statType;
+		this.statType = Objects.requireNonNullElse(statType, StatType.ANNUAL);
 	}
 
 	public StatType getStatType() {
