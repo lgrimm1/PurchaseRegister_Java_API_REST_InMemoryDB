@@ -21,25 +21,15 @@ import java.util.*;
  * @see #hashCode()
  * @author Laszlo Grimm
  */
-@Validated
 public class Purchase {
 
 	public enum PurchaseType {
 			CARD, CASH, INTERNET
 	}
-	@NotNull
-	@Min(value = Long.MIN_VALUE + 1, message = "Need a whole number between " + (Long.MIN_VALUE + 1) + " and " + Long.MAX_VALUE + ".")
-	@Max(value = Long.MAX_VALUE, message = "Need a whole number between " + (Long.MIN_VALUE + 1) + " and " + Long.MAX_VALUE + ".")
 	private final Long purchaseId;
-	@NotNull(message = "Need a legal date.")
 	private final LocalDate purchaseDate;
-	@NotNull(message = "Need a legal purchase type.")
 	private final PurchaseType purchaseType;
-	@NotNull(message = "Need a decimal number between " + Double.MIN_VALUE + " and " + Double.MAX_VALUE + ".")
-	@DecimalMin(value = "4.9E-324", message = "Need a decimal number between " + Double.MIN_VALUE + " and " + Double.MAX_VALUE + ".")
-	@DecimalMax(value = "1.7976931348623157E308", message = "Need a decimal number between " + Double.MIN_VALUE + " and " + Double.MAX_VALUE + ".")
 	private final Double purchaseValue;
-	@NotNull(message = "Need at least an empty text.")
 	private final String purchaseDescription;
 
 	public Purchase(long id, LocalDate dateOfPurchase, PurchaseType typeOfPurchase, double valueOfPurchase, String descriptionOfPurchase) {
@@ -81,16 +71,5 @@ public class Purchase {
 	@Override
 	public int hashCode() {
 		return Objects.hash(purchaseId, purchaseDate, purchaseType, purchaseValue, purchaseDescription);
-	}
-
-	@Override
-	public String toString() {
-		return "Purchase{" +
-				"purchaseId=" + purchaseId +
-				", purchaseDate=" + purchaseDate +
-				", purchaseType=" + purchaseType +
-				", purchaseValue=" + purchaseValue +
-				", purchaseDescription='" + purchaseDescription + '\'' +
-				'}';
 	}
 }
