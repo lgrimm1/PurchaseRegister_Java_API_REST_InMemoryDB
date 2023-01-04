@@ -1,24 +1,10 @@
 package PurchaseRegister.DataModels;
 
-import org.springframework.format.annotation.*;
-import org.springframework.lang.*;
-
-import javax.validation.constraints.*;
-import org.hibernate.validator.constraints.*;
-import org.springframework.validation.annotation.*;
-
 import java.time.*;
 import java.util.*;
 
 /**
  * This class represents a purchase.
- * @see #Purchase(long, LocalDate, PurchaseType, double, String)
- * @see #getPurchaseDate()
- * @see #getPurchaseType()
- * @see #getPurchaseValue()
- * @see #getPurchaseDescription()
- * @see #equals(Object)
- * @see #hashCode()
  * @author Laszlo Grimm
  */
 public class Purchase {

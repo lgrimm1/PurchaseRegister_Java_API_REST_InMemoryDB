@@ -21,6 +21,7 @@ class StatTest {
 	void copy() {
 		Stat stat = new Stat(50D, 2);
 		Stat statCopy = stat.deepCopy();
+		//noinspection UnusedAssignment
 		stat = new Stat(2D, 1);
 		Assertions.assertEquals(50D, statCopy.getTotal());
 		Assertions.assertEquals(2, statCopy.getCount());

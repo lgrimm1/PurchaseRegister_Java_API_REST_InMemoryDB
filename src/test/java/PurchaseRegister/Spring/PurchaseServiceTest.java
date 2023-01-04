@@ -205,42 +205,42 @@ class PurchaseServiceTest {
 		Assertions.assertEquals(2, generatedStatElements.size());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToLong(StatAnnualTransfer::getYear)
+				.mapToLong(StatAnnualTransfer::year)
 				.filter(n -> n == 2010)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToLong(StatAnnualTransfer::getYear)
+				.mapToLong(StatAnnualTransfer::year)
 				.filter(n -> n == 2020)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(StatAnnualTransfer::getTotal)
+				.mapToDouble(StatAnnualTransfer::total)
 				.filter(n -> n == 36D)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(StatAnnualTransfer::getTotal)
+				.mapToDouble(StatAnnualTransfer::total)
 				.filter(n -> n == 48D)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToLong(StatAnnualTransfer::getCount)
+				.mapToLong(StatAnnualTransfer::count)
 				.filter(n -> n == 1)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToLong(StatAnnualTransfer::getCount)
+				.mapToLong(StatAnnualTransfer::count)
 				.filter(n -> n == 2)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(StatAnnualTransfer::getAverage)
+				.mapToDouble(StatAnnualTransfer::average)
 				.filter(n -> n == 18D)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(StatAnnualTransfer::getAverage)
+				.mapToDouble(StatAnnualTransfer::average)
 				.filter(n -> n == 48D)
 				.count());
 	}
@@ -289,62 +289,62 @@ class PurchaseServiceTest {
 		Assertions.assertEquals(3, generatedStatElements.size());
 
 		Assertions.assertEquals(2, generatedStatElements.stream()
-				.mapToLong(StatMonthlyTransfer::getYear)
+				.mapToLong(StatMonthlyTransfer::year)
 				.filter(n -> n == 2010L)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToLong(StatMonthlyTransfer::getYear)
+				.mapToLong(StatMonthlyTransfer::year)
 				.filter(n -> n == 2020L)
 				.count());
 
 		Assertions.assertEquals(2, generatedStatElements.stream()
-				.mapToLong(StatMonthlyTransfer::getMonth)
+				.mapToLong(StatMonthlyTransfer::month)
 				.filter(n -> n == 6L)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToLong(StatMonthlyTransfer::getMonth)
+				.mapToLong(StatMonthlyTransfer::month)
 				.filter(n -> n == 8L)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(StatMonthlyTransfer::getTotal)
+				.mapToDouble(StatMonthlyTransfer::total)
 				.filter(n -> n == 36D)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(StatMonthlyTransfer::getTotal)
+				.mapToDouble(StatMonthlyTransfer::total)
 				.filter(n -> n == 48D)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(StatMonthlyTransfer::getTotal)
+				.mapToDouble(StatMonthlyTransfer::total)
 				.filter(n -> n == 99D)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToLong(StatMonthlyTransfer::getCount)
+				.mapToLong(StatMonthlyTransfer::count)
 				.filter(n -> n == 2L)
 				.count());
 
 		Assertions.assertEquals(2, generatedStatElements.stream()
-				.mapToLong(StatMonthlyTransfer::getCount)
+				.mapToLong(StatMonthlyTransfer::count)
 				.filter(n -> n == 1L)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(StatMonthlyTransfer::getAverage)
+				.mapToDouble(StatMonthlyTransfer::average)
 				.filter(n -> n == 18D)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(StatMonthlyTransfer::getAverage)
+				.mapToDouble(StatMonthlyTransfer::average)
 				.filter(n -> n == 48D)
 				.count());
 
 		Assertions.assertEquals(1, generatedStatElements.stream()
-				.mapToDouble(StatMonthlyTransfer::getAverage)
+				.mapToDouble(StatMonthlyTransfer::average)
 				.filter(n -> n == 99D)
 				.count());
 	}
@@ -381,8 +381,8 @@ class PurchaseServiceTest {
 		(84D, 3L, 28D)
 */
 
-		Assertions.assertEquals(84D, generatedStatElements.getTotal());
-		Assertions.assertEquals(3L, generatedStatElements.getCount());
-		Assertions.assertEquals(28D, generatedStatElements.getAverage());
+		Assertions.assertEquals(84D, generatedStatElements.total());
+		Assertions.assertEquals(3L, generatedStatElements.count());
+		Assertions.assertEquals(28D, generatedStatElements.average());
 	}
 }

@@ -6,12 +6,6 @@ import java.util.stream.*;
 
 /**
  * This class serves as statistical data collector, upgraded at every request on statistics.
- * @see #StatMap(StatType)
- * @see #getStatType()
- * @see #put(Purchase)
- * @see #get(LocalDate)
- * @see #count()
- * @see #stream()
  * @author Laszlo Grimm
  */
 public class StatMap {

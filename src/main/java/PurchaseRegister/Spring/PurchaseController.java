@@ -4,26 +4,12 @@ import PurchaseRegister.DataModels.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.lang.*;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.*;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.*;
 import java.util.*;
 
 /**
  * Controller class for handling Purchase Register requests.
- * @see #PurchaseController(PurchaseService)
- * @see #getPurchaseById(long)
- * @see #addNewPurchase(Purchase)
- * @see #modifyPurchase(Purchase)
- * @see #deletePurchase(long)
- * @see #getPurchases()
- * @see #deletePurchases(List)
- * @see #countPurchases()
- * @see #statAnnual()
- * @see #statMonthly()
- * @see #statFull()
  * @author Laszlo Grimm
  */
 @RestController

@@ -1,12 +1,7 @@
 package PurchaseRegister.DataModels;
 
 /**
- * This class represents a statistics element.
- * @see #Stat(double, int)
- * @see #getTotal()
- * @see #getCount()
- * @see #getAverage()
- * @see #deepCopy()
+ * This class represents a statistical element.
  * @author Laszlo Grimm
  */
 public class Stat {

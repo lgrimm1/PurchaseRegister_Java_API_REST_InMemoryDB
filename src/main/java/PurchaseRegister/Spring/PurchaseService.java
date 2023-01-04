@@ -8,17 +8,6 @@ import java.util.*;
 
 /**
  * Service class of PurchaseController class.
- * @see #PurchaseService(PurchaseStorage)
- * @see #getPurchaseById(long)
- * @see #addNewPurchase(Purchase)
- * @see #modifyPurchase(Purchase)
- * @see #deletePurchase(long)
- * @see #getPurchases()
- * @see #deletePurchases(List)
- * @see #countPurchases()
- * @see #generateAnnualStat()
- * @see #generateMonthlyStat()
- * @see #generateFullStat()
  * @author Laszlo Grimm
  */
 @Service

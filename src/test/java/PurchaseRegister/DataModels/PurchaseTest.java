@@ -1,10 +1,7 @@
 package PurchaseRegister.DataModels;
 
-import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.databind.*;
 import org.junit.jupiter.api.*;
 
-import java.io.*;
 import java.time.*;
 
 class PurchaseTest {
