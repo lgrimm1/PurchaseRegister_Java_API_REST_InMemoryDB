@@ -267,7 +267,6 @@ class PurchaseServiceTest {
 						48D,
 						"abc"),
 				new Purchase(
-
 						1L,
 						LocalDate.of(2020, 6, 16),
 						Purchase.PurchaseType.CARD,
