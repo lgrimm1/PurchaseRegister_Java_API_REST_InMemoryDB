@@ -1,5 +1,5 @@
 # PurchaseRegister (Java, backend, REST, in-Memory DB)
-<p>RESTful Spring.Boot web application (backend, REST API) for managing and analysing purchases.</p>
+<p>RESTful Spring.Boot API for managing and analysing purchases.</p>
 <p>This project has been made in order to demonstrate coding capabilities of the owner.</p>
 <p>Language: Java 17</p>
 <p>Libraries: Java Core, Spring.Boot, MockMVC, Mockito</p>
